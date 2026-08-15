@@ -30,6 +30,8 @@
   }
   a{color:inherit; text-decoration:none;}
   .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  @media (max-width:768px){ .wrap{padding:0 24px;} }
+  @media (max-width:480px){ .wrap{padding:0 16px;} }
   .serif{font-family:'Fraunces', serif;}
   .script{font-family:'Marck Script', cursive; font-weight:400;}
 
@@ -40,19 +42,20 @@
   /* ---------- NAV ---------- */
   header{
     position:fixed; top:0; left:0; right:0; z-index:50;
-    padding:20px 0;
+    padding:16px 0;
     background:rgba(74,59,50,0.0);
     transition:background 0.35s ease, padding 0.35s ease, box-shadow .35s ease;
   }
   header.scrolled{
     background:rgba(74,59,50,0.92);
     backdrop-filter:blur(8px);
-    padding:14px 0;
+    padding:12px 0;
     box-shadow:0 1px 0 var(--line);
   }
-  nav{display:flex; align-items:center; justify-content:space-between;}
+  nav{display:flex; align-items:center; justify-content:space-between; gap:16px;}
   .brand{display:flex; align-items:center; gap:10px; font-size:15px; letter-spacing:.08em;}
-  .brand img{height:34px; width:auto; display:block; filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));}
+  .brand img{height:32px; width:auto; display:block; filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));}
+  @media (max-width:720px){ .brand img{height:28px;} }
   .navlinks{display:flex; gap:34px; font-size:14px; letter-spacing:.04em;}
   .navlinks a{position:relative; padding-bottom:4px; opacity:.88;}
   .navlinks a::after{
@@ -60,14 +63,29 @@
     transition:width .3s ease;
   }
   .navlinks a:hover::after{width:100%;}
+  .navlinks a:focus{outline:2px solid var(--gold); outline-offset:4px;}
   .nav-cta{
-    border:1px solid var(--cream-dim); padding:9px 20px; border-radius:2px;
+    border:1px solid var(--cream-dim); padding:11px 20px; border-radius:2px;
     font-size:13px; letter-spacing:.08em; text-transform:uppercase;
     transition:background .25s ease, color .25s ease;
+    min-height:44px; display:flex; align-items:center;
   }
   .nav-cta:hover{background:var(--cream); color:var(--mocha-deep);}
+  .nav-cta:focus{outline:2px solid var(--gold); outline-offset:4px;}
   .navlinks{display:flex;}
-  @media (max-width:720px){ .navlinks{display:none;} }
+  .hamburger{display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:8px;}
+  .hamburger span{width:24px; height:2px; background:var(--cream); transition:all .3s ease;}
+  .hamburger:focus{outline:2px solid var(--gold); outline-offset:4px;}
+  
+  @media (max-width:720px){
+    .navlinks{display:none; position:absolute; top:60px; left:0; right:0; flex-direction:column; background:rgba(74,59,50,0.95); padding:20px; gap:16px; z-index:40;}
+    .navlinks.active{display:flex;}
+    .navlinks a{padding:12px 0; min-height:44px; display:flex; align-items:center;}
+    .hamburger{display:flex;}
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(10px, 10px);}
+    .hamburger.active span:nth-child(2){opacity:0;}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(7px, -7px);}
+  }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -75,7 +93,7 @@
     min-height:100svh;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     text-align:center;
-    padding:140px 24px 100px;
+    padding:140px 20px 80px;
     overflow:hidden;
   }
   .hero-ghost{
@@ -98,44 +116,47 @@
   }
   .hero-band{
     background:var(--mocha-deep);
-    padding:22px 48px;
+    padding:18px 32px;
     border-top:1px solid var(--line);
     border-bottom:1px solid var(--line);
     opacity:0; animation:riseIn .9s ease forwards; animation-delay:.25s;
   }
   .hero-band .script{
-    font-size:clamp(42px, 8vw, 88px);
+    font-size:clamp(32px, 8vw, 88px);
     color:var(--cream);
     line-height:1;
   }
   .hero-tagline{
-    margin-top:30px;
-    font-size:clamp(15px, 2vw, 18px);
+    margin-top:24px;
+    font-size:clamp(13px, 2vw, 18px);
     letter-spacing:.06em;
     color:var(--cream-dim);
     text-transform:uppercase;
     opacity:0; animation:riseIn .9s ease forwards; animation-delay:.42s;
   }
-  .hero-tagline .dot{color:var(--gold); margin:0 10px;}
+  .hero-tagline .dot{color:var(--gold); margin:0 8px;}
   .hero-ctas{
-    margin-top:46px; display:flex; gap:18px; flex-wrap:wrap; justify-content:center;
+    margin-top:36px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
     opacity:0; animation:riseIn .9s ease forwards; animation-delay:.58s;
   }
   .btn{
     font-family:'Work Sans', sans-serif;
-    padding:15px 32px; font-size:13px; letter-spacing:.1em; text-transform:uppercase;
+    padding:15px 28px; font-size:13px; letter-spacing:.1em; text-transform:uppercase;
     border-radius:2px; cursor:pointer; border:1px solid transparent;
     transition:transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
     display:inline-block;
+    min-height:44px; display:flex; align-items:center; justify-content:center;
   }
   .btn-solid{background:var(--cream); color:var(--mocha-deep);}
   .btn-solid:hover{transform:translateY(-2px); background:var(--gold); color:var(--ink);}
+  .btn-solid:focus{outline:2px solid var(--gold); outline-offset:4px;}
   .btn-ghost{border-color:var(--cream-dim); color:var(--cream);}
   .btn-ghost:hover{transform:translateY(-2px); border-color:var(--cream);}
+  .btn-ghost:focus{outline:2px solid var(--gold); outline-offset:4px;}
 
   .scroll-cue{
-    position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
-    width:1px; height:52px; background:linear-gradient(var(--cream-dim), transparent);
+    position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+    width:1px; height:40px; background:linear-gradient(var(--cream-dim), transparent);
     opacity:.6;
   }
   .scroll-cue::after{
@@ -144,11 +165,18 @@
     animation:cueMove 2.2s ease-in-out infinite;
   }
   @keyframes cueMove{
-    0%{top:0; opacity:1;} 90%{opacity:0;} 100%{top:44px; opacity:0;}
+    0%{top:0; opacity:1;} 90%{opacity:0;} 100%{top:32px; opacity:0;}
   }
   @keyframes riseIn{
     from{opacity:0; transform:translateY(18px);}
     to{opacity:1; transform:translateY(0);}
+  }
+
+  @media (max-width:480px){
+    .hero{padding:120px 16px 60px;}
+    .hero-band{padding:14px 24px;}
+    .hero-ctas{gap:10px; margin-top:28px;}
+    .scroll-cue{display:none;}
   }
 
   /* ---------- SECTION GENERIC ---------- */
@@ -165,10 +193,20 @@
   .reveal{opacity:0; transform:translateY(28px); transition:opacity .8s ease, transform .8s ease;}
   .reveal.in{opacity:1; transform:translateY(0);}
 
+  @media (max-width:768px){
+    section{padding:80px 0;}
+    .section-head{margin-bottom:48px;}
+  }
+  @media (max-width:480px){
+    section{padding:60px 0;}
+    .section-head{margin-bottom:36px;}
+  }
+
   /* ---------- ABOUT ---------- */
   .about{background:var(--mocha-deep); position:relative;}
-  .about .wrap{display:grid; grid-template-columns:0.9fr 1.1fr; gap:70px; align-items:center;}
-  @media (max-width:860px){ .about .wrap{grid-template-columns:1fr;} }
+  .about .wrap{display:grid; grid-template-columns:0.95fr 1.05fr; gap:40px; align-items:center;}
+  @media (max-width:860px){ .about .wrap{grid-template-columns:1fr; gap:40px;} }
+  @media (max-width:600px){ .about .wrap{gap:30px;} }
   .about-frame{
     aspect-ratio:4/5; background:var(--mocha);
     border:1px solid var(--line);
@@ -177,45 +215,60 @@
   }
   .host-frame img, .about-frame img{width:100%; height:100%; object-fit:cover; display:block;}
   .about-text p{
-    font-size:17px; line-height:1.85; color:var(--cream-dim); max-width:520px; margin-bottom:18px;
+    font-size:clamp(15px, 1.8vw, 16px); line-height:1.75; color:var(--cream-dim); max-width:480px; margin-bottom:16px;
   }
   .about-text p:first-of-type::first-letter{
-    font-family:'Fraunces', serif; font-size:64px; float:left; line-height:.8;
+    font-family:'Fraunces', serif; font-size:clamp(48px, 10vw, 64px); float:left; line-height:.8;
     padding-right:10px; padding-top:6px; color:var(--gold); font-weight:600;
   }
   .stat-row{display:flex; gap:44px; margin-top:38px; flex-wrap:wrap;}
   .stat-row div{border-top:1px solid var(--line); padding-top:14px; min-width:110px;}
-  .stat-num{font-family:'Fraunces', serif; font-size:30px; color:var(--cream); font-weight:600;}
+  .stat-num{font-family:'Fraunces', serif; font-size:clamp(24px, 5vw, 30px); color:var(--cream); font-weight:600;}
   .stat-label{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--cream-dim); margin-top:4px;}
+
+  @media (max-width:600px){
+    .stat-row{gap:30px;}
+    .stat-row div{min-width:100px;}
+  }
 
   /* ---------- EPISODES ---------- */
   .episodes{background:var(--mocha);}
   .ep-list{border-top:1px solid var(--line);}
   .ep-row{
-    display:grid; grid-template-columns:90px 1fr auto; align-items:center; gap:28px;
-    padding:30px 0; border-bottom:1px solid var(--line);
+    display:grid; grid-template-columns:60px 1fr auto; align-items:center; gap:20px;
+    padding:24px 0; border-bottom:1px solid var(--line);
     transition:padding-left .3s ease;
     cursor:default;
   }
   .ep-row:hover{padding-left:14px;}
   .ep-row:hover .ep-band{width:100%;}
-  .ep-num{font-family:'Fraunces', serif; font-size:15px; color:var(--gold); letter-spacing:.04em;}
-  .ep-title{font-size:clamp(19px,2.4vw,26px); font-weight:500; color:var(--cream); position:relative; display:inline-block;}
+  .ep-row:focus-within .ep-title{color:var(--gold);}
+  .ep-num{font-family:'Fraunces', serif; font-size:clamp(13px, 2vw, 15px); color:var(--gold); letter-spacing:.04em;}
+  .ep-title{font-size:clamp(16px, 2.4vw, 26px); font-weight:500; color:var(--cream); position:relative; display:inline-block;}
+  .ep-title:focus{outline:2px solid var(--gold); outline-offset:4px;}
   .ep-band{
     position:absolute; left:0; bottom:-2px; height:2px; width:26%; background:var(--gold);
     transition:width .4s ease;
   }
-  .ep-meta{font-size:13px; color:var(--cream-dim); margin-top:8px;}
+  .ep-meta{font-size:clamp(12px, 2vw, 13px); color:var(--cream-dim); margin-top:6px;}
   .ep-play{
-    width:46px; height:46px; border-radius:50%; border:1px solid var(--cream-dim);
+    width:48px; height:48px; border-radius:50%; border:1px solid var(--cream-dim);
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
     transition:background .25s ease, border-color .25s ease;
+    min-height:48px;
   }
+  .ep-play:focus{outline:2px solid var(--gold); outline-offset:4px;}
   .ep-row:hover .ep-play{background:var(--cream); border-color:var(--cream);}
   .ep-play svg{width:14px; height:14px; fill:var(--cream);}
   .ep-row:hover .ep-play svg{fill:var(--mocha-deep);}
+  
+  @media (max-width:768px){
+    .ep-row{grid-template-columns:50px 1fr auto; gap:16px; padding:20px 0;}
+  }
   @media (max-width:600px){
-    .ep-row{grid-template-columns:50px 1fr auto;}
+    .ep-row{grid-template-columns:45px 1fr auto; gap:12px; padding:16px 0;}
+    .ep-num{font-size:12px;}
+    .ep-title{font-size:clamp(14px, 2vw, 20px);}
   }
 
   /* ---------- SUBSCRIBE (signature band) ---------- */
@@ -228,50 +281,58 @@
   .sub-ghost{
     width:100%; text-align:center;
     font-family:'Fraunces', serif; font-weight:600;
-    font-size:clamp(64px, 15vw, 220px);
+    font-size:clamp(48px, 15vw, 220px);
     color:var(--mocha);
-    line-height:1; padding-top:70px;
+    line-height:1; padding-top:clamp(40px, 8vw, 70px);
     letter-spacing:-.01em;
   }
   .sub-band{
     background:var(--cream); color:var(--mocha-deep);
-    padding:56px 0 70px;
+    padding:clamp(40px, 8vw, 70px) 0;
     margin-top:-30px;
     position:relative;
     border-top:1px solid rgba(31,27,23,.08);
     border-bottom:1px solid rgba(31,27,23,.08);
   }
   .sub-band .wrap{display:flex; flex-direction:column; align-items:center; text-align:center;}
-  .sub-band h3{font-family:'Fraunces', serif; font-size:clamp(26px,3.4vw,38px); font-weight:600; margin-bottom:12px;}
-  .sub-band p{color:var(--mocha-deep); opacity:.72; margin-bottom:38px; font-size:15px;}
-  .platform-row{display:flex; flex-wrap:wrap; justify-content:center; gap:14px;}
+  .sub-band h3{font-family:'Fraunces', serif; font-size:clamp(22px, 3.4vw, 38px); font-weight:600; margin-bottom:12px;}
+  .sub-band p{color:var(--mocha-deep); opacity:.72; margin-bottom:28px; font-size:clamp(14px, 2vw, 15px);}
+  .platform-row{display:flex; flex-wrap:wrap; justify-content:center; gap:12px;}
   .platform-btn{
-    border:1px solid var(--mocha-deep); padding:13px 26px; font-size:13px;
+    border:1px solid var(--mocha-deep); padding:13px 20px; font-size:clamp(11px, 2vw, 13px);
     letter-spacing:.06em; text-transform:uppercase; border-radius:2px;
     transition:background .25s ease, color .25s ease, transform .25s ease;
+    min-height:44px; display:flex; align-items:center; justify-content:center;
   }
   .platform-btn:hover{background:var(--mocha-deep); color:var(--cream); transform:translateY(-2px);}
+  .platform-btn:focus{outline:2px solid var(--mocha-deep); outline-offset:4px;}
   .platform-btn-solid{background:var(--mocha-deep); color:var(--cream); border-color:var(--mocha-deep);}
   .platform-btn-solid:hover{background:var(--gold); border-color:var(--gold); color:var(--ink);}
-  .alert-divider{display:flex; align-items:center; gap:16px; width:100%; max-width:360px; margin:40px 0 34px; color:var(--mocha-deep); opacity:.6;}
+  .platform-btn-solid:focus{outline:2px solid var(--gold); outline-offset:4px;}
+  .alert-divider{display:flex; align-items:center; gap:16px; width:100%; max-width:360px; margin:32px 0 26px; color:var(--mocha-deep); opacity:.6;}
   .alert-divider span{flex:1; height:1px; background:var(--mocha-deep);}
   .alert-divider em{font-style:normal; font-size:13px; letter-spacing:.1em; text-transform:uppercase;}
 
-  /* ---------- FOOTER ---------- */
-  footer{background:var(--mocha); padding:70px 0 34px;}
-  .foot-top{
-    display:flex; justify-content:space-between; align-items:flex-start; gap:40px; flex-wrap:wrap;
-    padding-bottom:46px; border-bottom:1px solid var(--line);
+  @media (max-width:600px){
+    .sub-band{padding:clamp(30px, 6vw, 50px) 0;}
+    .sub-ghost{padding-top:clamp(30px, 6vw, 50px);}
+    .alert-divider{margin:24px 0 20px;}
+    .platform-row{gap:10px;}
+    .platform-btn{padding:12px 16px;}
   }
-  .foot-brand .script{font-size:34px; color:var(--cream);}
-  .foot-brand p{color:var(--cream-dim); font-size:13px; margin-top:10px; max-width:280px;}
-  .foot-links{display:flex; gap:60px; flex-wrap:wrap;}
-  .foot-col h4{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:16px;}
-  .foot-col a{display:block; font-size:14px; color:var(--cream-dim); margin-bottom:10px; transition:color .2s ease;}
-  .foot-col a:hover{color:var(--cream);}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--mocha); padding:clamp(30px, 5vw, 40px) 0;}
   .foot-bottom{
-    display:flex; justify-content:space-between; align-items:center; padding-top:26px;
-    font-size:12px; color:var(--cream-dim); flex-wrap:wrap; gap:12px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:clamp(12px, 2vw, 13px); color:var(--cream-dim); flex-wrap:wrap; gap:16px;
+  }
+  .foot-bottom a{transition:color .2s ease;}
+  .foot-bottom a:hover{color:var(--cream);}
+  .foot-bottom a:focus{outline:2px solid var(--gold); outline-offset:4px;}
+
+  @media (max-width:600px){
+    .foot-bottom{flex-direction:column; text-align:center; gap:24px;}
   }
 </style>
 </head>
@@ -316,7 +377,7 @@
     </div>
     <div class="about-text">
       <span class="eyebrow" style="color:var(--gold); font-size:12px; letter-spacing:.3em; text-transform:uppercase; display:block; margin-bottom:18px;">About the host</span>
-      <p>Kerry Yaps Podcast is hosted by Kerry.K &mdash; a girlie knowledgeable enough to yap professionally. What started as everyday yapping turns into meaningful, no-fluff conversations across tech, culture, lifestyle, and everything in between.</p>
+      <p>Kerry Yaps Podcast is hosted by Kerry Namayan &mdash; a girlie knowledgeable enough to yap professionally. What started as everyday yapping turns into meaningful, no-fluff conversations across tech, culture, lifestyle, and everything in between.</p>
       <p>Each episode blends curiosity with clarity, breaking down complex ideas into stories you'll actually enjoy listening to. Smart talks meet unapologetic yapping &mdash; all in one show.</p>
       <div class="stat-row">
         <div><div class="stat-num serif">Tech</div><div class="stat-label">Culture &middot; Lifestyle</div></div>
@@ -331,17 +392,20 @@
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">Latest drop</span>
-      <h2>New episodes on the way.</h2>
+      <h2>Ep 01: Welcome to the Yap.</h2>
     </div>
     <div class="ep-list reveal">
+      <div class="spotify-embed" style="margin:60px 0 0;">
+        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/show/6NKvVwbpM24piEuVzE9Fcv?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
 
       <div class="ep-row">
-        <div class="ep-num serif">Trailer</div>
+        <div class="ep-num serif">01</div>
         <div>
-          <a href="https://open.spotify.com/show/6NKvVwbpM24piEuVzE9Fcv?si=e5a503e05cf54adf" target="_blank" rel="noopener" class="ep-title">Welcome to the collective<span class="ep-band"></span></a>
-          <div class="ep-meta">This is just the tip of the iceberg &middot; Feb 26</div>
+          <a href="#" class="ep-title">Welcome to the Yap<span class="ep-band"></span></a>
+          <div class="ep-meta">August 2026 · 45 mins</div>
         </div>
-        <div class="ep-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <a href="#" class="ep-play" aria-label="Play episode"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a>
       </div>
 
     </div>
@@ -368,30 +432,13 @@
 </section>
 
 <footer>
-  <div class="wrap">
-    <div class="foot-top">
-      <div class="foot-brand">
-        <span class="script">Kerry Yaps</span>
-        <p>Smart talks, unapologetic yapping. New episodes dropping soon &mdash; join the yap collective.</p>
-      </div>
-      <div class="foot-links">
-        <div class="foot-col">
-          <h4>Show</h4>
-          <a href="#about">About</a>
-          <a href="#episodes">Episodes</a>
-          <a href="#subscribe">Subscribe</a>
-        </div>
-        <div class="foot-col">
-          <h4>Connect</h4>
-          <a href="https://open.spotify.com/show/6NKvVwbpM24piEuVzE9Fcv?si=e5a503e05cf54adf" target="_blank" rel="noopener">Spotify</a>
-          <a href="https://www.instagram.com/kerryyapspodcast" target="_blank" rel="noopener">Instagram</a>
-          <a href="mailto:kerryyapspodcast@gmail.com">Email Kerry</a>
-        </div>
-      </div>
+  <div class="wrap" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:20px;">
+    <div>&copy; 2026 Kerry Yaps Podcast</div>
+    <div style="font-size:13px; color:var(--cream-dim);">
+      <a href="#" style="margin-right:12px;">Privacy</a> &middot; <a href="#" style="margin-left:12px;">Terms &amp; Conditions</a>
     </div>
-    <div class="foot-bottom">
-      <span>&copy; 2026 Kerry Yaps Podcast. All rights reserved.</span>
-      <span>Made for people who'd rather talk it through.</span>
+    <div style="font-size:13px; color:var(--cream-dim);">
+      <a href="mailto:kerryyapspodcast@gmail.com" style="margin-right:12px;">Email</a> &middot; <a href="https://www.instagram.com/kerryyapspodcast" style="margin-left:12px;" target="_blank" rel="noopener">Instagram</a>
     </div>
   </div>
 </footer>
