@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yap Wall | Kerry Yaps Podcast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=Marck+Script&display=swap" rel="stylesheet">
+<style>
+  :root{--mocha:#8B7263;--mocha-deep:#4A3B32;--ink:#1F1B17;--cream:#F4EBE0;--cream-dim:#E7D9C8;--gold:#B8925A;--line:rgba(244,235,224,.28);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--mocha);color:var(--cream);font-family:'Work Sans',sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+  header{padding:20px 0;background:var(--mocha-deep);border-bottom:1px solid var(--line);}
+  nav{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+  .brand{font-size:15px;letter-spacing:.08em;}
+  .back-link,.nav-link{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--cream-dim);}
+  .back-link:hover,.nav-link:hover{color:var(--cream);}
+  .hero{padding:110px 0 90px;background:var(--mocha-deep);}
+  .eyebrow{display:block;color:var(--gold);font-size:12px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:18px;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;line-height:1.1;}
+  h1{font-size:clamp(48px,8vw,92px);max-width:780px;}
+  .hero-copy{font-size:clamp(17px,2.2vw,22px);color:var(--cream-dim);max-width:640px;margin:24px 0 32px;}
+  .hero-copy strong{color:var(--cream);font-weight:500;}
+  .button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:14px 24px;border:1px solid var(--cream-dim);border-radius:2px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;transition:background .25s ease,color .25s ease,transform .25s ease;}
+  .button:hover{background:var(--cream);color:var(--mocha-deep);transform:translateY(-2px);}
+  .button-solid{background:var(--cream);color:var(--mocha-deep);border-color:var(--cream);}
+  .button-solid:hover{background:var(--gold);border-color:var(--gold);color:var(--ink);}
+  section{padding:96px 0;}
+  .section-heading{margin-bottom:38px;}
+  h2{font-size:clamp(34px,5vw,56px);}
+  h3{font-size:24px;color:var(--cream);margin-bottom:12px;}
+  .intro-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:56px;align-items:start;}
+  .intro-grid p,.intro-grid li{color:var(--cream-dim);}
+  ul{padding-left:22px;}
+  li{margin-bottom:10px;}
+  .rule-box{border-left:2px solid var(--gold);padding:4px 0 4px 28px;}
+  .submission{background:var(--mocha-deep);}
+  .submission h2{max-width:620px;}
+  .form-note{color:var(--cream-dim);max-width:680px;margin:14px 0 34px;}
+  .yap-form{max-width:760px;display:grid;gap:20px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .field{display:grid;gap:7px;}
+  .field label{font-size:13px;letter-spacing:.05em;color:var(--cream);}
+  .field small{font-size:12px;color:var(--cream-dim);}
+  .field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:2px;background:rgba(244,235,224,.08);color:var(--cream);font:inherit;padding:12px 14px;}
+  .field select option{color:var(--ink);}
+  .field textarea{min-height:150px;resize:vertical;}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--gold);outline-offset:2px;}
+  .check-field{display:flex;gap:10px;align-items:flex-start;color:var(--cream-dim);font-size:13px;}
+  .check-field input{width:18px;height:18px;flex:0 0 auto;margin-top:3px;accent-color:var(--gold);}
+  .check-field a{color:var(--cream);text-decoration:underline;}
+  .form-status{min-height:24px;color:var(--cream);}
+  .form-status.success{color:#d8e6c4;}
+  .form-status.error{color:#f0c2a8;}
+  .wall{background:var(--cream);color:var(--ink);}
+  .wall .eyebrow{color:var(--mocha);}
+  .wall h2{color:var(--mocha-deep);}
+  .wall-intro{color:#66554c;max-width:680px;margin-top:12px;}
+  .yap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:38px;}
+  .yap-card{background:#fffaf4;border-top:3px solid var(--gold);padding:26px;min-height:250px;display:flex;flex-direction:column;}
+  .yap-card blockquote{font-family:'Fraunces',serif;font-size:22px;line-height:1.35;color:var(--mocha-deep);}
+  .yap-credit{margin-top:auto;padding-top:24px;color:#66554c;font-size:14px;}
+  .yap-topic{display:block;color:var(--mocha);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-top:6px;}
+  .prompts{background:var(--mocha);}
+  .prompt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 44px;}
+  .prompt-grid li{border-bottom:1px solid var(--line);padding:17px 0;margin:0;color:var(--cream-dim);}
+  .cta{background:var(--mocha-deep);text-align:center;padding:100px 0;}
+  .cta h2{max-width:620px;margin:0 auto 18px;}
+  .cta p{color:var(--cream-dim);max-width:560px;margin:0 auto 30px;}
+  .cta-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
+  footer{background:var(--mocha);padding:34px 0;text-align:center;color:var(--cream-dim);font-size:13px;}
+  footer a{color:var(--cream);}
+  footer a:hover{color:var(--gold);}
+  .footer-links{margin-top:10px;}
+  @media (max-width:760px){.wrap{padding:0 24px;}.hero{padding:80px 0 70px;}section{padding:70px 0;}.intro-grid,.yap-grid,.prompt-grid,.form-row{grid-template-columns:1fr;gap:26px;}.yap-card{min-height:220px;}.nav-link{display:none;}}
+  @media (max-width:480px){.wrap{padding:0 16px;}h1{font-size:48px;}.button{width:100%;}.cta-actions{flex-direction:column;align-items:stretch;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <nav aria-label="Page navigation">
+      <a href="index.html" class="brand">KERRY YAPS PODCAST</a>
+      <a href="index.html#episodes" class="nav-link">Listen to episodes</a>
+      <a href="index.html" class="back-link">Back to podcast</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">A curated community space</span>
+      <h1>The Yap Wall</h1>
+      <p class="hero-copy"><strong>Your thoughts belong in the conversation.</strong><br>Drop a question, a story, a lesson, an unpopular opinion, or a topic you want to hear explored on Kerry Yaps Podcast.</p>
+      <a href="#submit-yap" class="button button-solid">Drop a Yap</a>
+    </div>
+  </section>
+
+  <section class="submission" id="submit-yap">
+    <div class="wrap">
+      <span class="eyebrow">Submit for review</span>
+      <h2>Put your thought on the table.</h2>
+      <p class="form-note">Your Yap goes to the Kerry Yaps Podcast team first. It will never appear publicly without review and your permission. You can choose Anonymous, a first name, or a handle for credit.</p>
+      <form class="yap-form" name="yap-wall" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="yap-form">
+        <input type="hidden" name="form-name" value="yap-wall">
+        <div hidden><label>Do not fill this out: <input name="bot-field"></label></div>
+        <div class="field">
+          <label for="yap-message">What do you want to yap about? *</label>
+          <textarea id="yap-message" name="yap-message" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="topic">Choose a topic *</label>
+            <select id="topic" name="topic" required>
+              <option value="">Select a topic</option>
+              <option>Relationships, dating &amp; friendship</option>
+              <option>Self, mindset &amp; mental health</option>
+              <option>Tech, media &amp; social media</option>
+              <option>Culture, society &amp; power</option>
+              <option>Money, work &amp; ambition</option>
+              <option>Spirituality, meaning &amp; identity</option>
+              <option>Episode request</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="credit">How should we credit you? *</label>
+            <input id="credit" name="credit" placeholder="Anonymous, first name, or handle" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="handle">Instagram handle</label>
+            <input id="handle" name="handle" placeholder="Optional">
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" placeholder="Optional">
+            <small>Only add this if you would like a reply from Kerry.</small>
+          </div>
+        </div>
+        <label class="check-field"><input type="checkbox" name="reply-request" value="yes"> <span>Yes, I would like a reply from Kerry.</span></label>
+        <label class="check-field"><input type="checkbox" name="handle-display" value="yes"> <span>Yes, I would like my handle shown if my Yap is published.</span></label>
+        <label class="check-field"><input type="checkbox" name="publication-consent" value="yes" required> <span>I understand that my submission will be reviewed before publication and may be selected for the Yap Wall, social media, episode show notes, or podcast discussion. I give Kerry Yaps Podcast permission to edit it for clarity, length, spelling, and format without changing its intended meaning. I have not included confidential information or personal information about another person without permission, and I understand I can request removal by emailing <a href="mailto:kerryyapspodcast@gmail.com">kerryyapspodcast@gmail.com</a>. *</span></label>
+        <label class="check-field"><input type="checkbox" name="newsletter-consent" value="yes"> <span>Optional: send me occasional Kerry Yaps Podcast updates and new-episode alerts.</span></label>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        <div><button type="submit" class="button button-solid">Send for review</button></div>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap intro-grid">
+      <div>
+        <span class="eyebrow">Before you yap</span>
+        <h2>Keep it kind, relevant, and respectful.</h2>
+      </div>
+      <div class="rule-box">
+        <p>Please do not share private information about yourself or anyone else, including phone numbers, addresses, workplaces, medical details, or identifying details about someone who has not agreed to be named.</p>
+        <p>Every submission is reviewed before publication. We may edit for clarity and length, publish anonymously, decline, or remove submissions that are harmful, defamatory, discriminatory, spammy, off-topic, or disclose someone's private information.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wall" id="featured-yaps">
+    <div class="wrap">
+      <div class="section-heading">
+        <span class="eyebrow">Selected submissions</span>
+        <h2>Featured Yaps</h2>
+        <p class="wall-intro">Selected Yaps may appear here, in episode show notes, or be discussed on the podcast, always with the name or handle chosen by the sender.</p>
+      </div>
+      <div class="yap-grid">
+        <article class="yap-card">
+          <blockquote>“The biggest friendship red flag is feeling like you must shrink yourself to keep the peace.”</blockquote>
+          <p class="yap-credit">- Anonymous, Nairobi<span class="yap-topic">Friendship &amp; Boundaries</span></p>
+        </article>
+        <article class="yap-card">
+          <blockquote>“Maybe the problem is not that we overthink; maybe we keep ignoring what we already know.”</blockquote>
+          <p class="yap-credit">- @thequiettake<span class="yap-topic">Self-reflection</span></p>
+        </article>
+        <article class="yap-card">
+          <blockquote>“I need an episode on black tax - not only the money, but the guilt of saying no.”</blockquote>
+          <p class="yap-credit">- Anonymous<span class="yap-topic">Topic request: Money &amp; Family</span></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="prompts">
+    <div class="wrap">
+      <div class="section-heading">
+        <span class="eyebrow">Bring a thought to the wall</span>
+        <h2>Start with a prompt.</h2>
+      </div>
+      <ul class="prompt-grid">
+        <li>What is something society has normalized that needs to be questioned?</li>
+        <li>What is a friendship lesson you learned the hard way?</li>
+        <li>What is one relationship ick that signals a deeper value?</li>
+        <li>What is your current “maybe the problem is me” realization?</li>
+        <li>What is a money conversation people avoid having?</li>
+        <li>What topic should Kerry yap about next?</li>
+        <li>What is one thing you wish you knew in your early twenties?</li>
+        <li>What is your unpopular but respectful take on dating, culture, or ambition?</li>
+        <li>What helps you stay grounded when social media becomes too loud?</li>
+        <li>What is a red flag people excuse too easily?</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Keep the conversation going.</h2>
+      <p>Have more to say? Send a Yap, follow the podcast, and join the collective. Every submission is reviewed before it appears publicly.</p>
+      <div class="cta-actions">
+        <a href="#submit-yap" class="button button-solid">Drop a Yap</a>
+        <a href="https://open.spotify.com/show/6NKvVwbpM24piEuVzE9Fcv" target="_blank" rel="noopener" class="button">Listen on Spotify</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>&copy; 2026 Kerry Yaps Podcast</div>
+    <div class="footer-links"><a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a> &middot; <a href="disclaimer.html">Disclaimer</a> &middot; <a href="dmca.html">Copyright</a> &middot; <a href="mailto:kerryyapspodcast@gmail.com">Email</a></div>
+  </div>
+</footer>
+<script>
+  const yapForm = document.getElementById('yap-form');
+  const formStatus = document.getElementById('form-status');
+  yapForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    formStatus.className = 'form-status';
+    formStatus.textContent = 'Sending your Yap for review...';
+    const formData = new FormData(yapForm);
+    try {
+      await fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams(formData).toString()});
+      yapForm.reset();
+      formStatus.className = 'form-status success';
+      formStatus.textContent = 'Your Yap has landed. Thanks for adding to the collective; every submission is reviewed before it appears publicly.';
+    } catch (error) {
+      formStatus.className = 'form-status error';
+      formStatus.textContent = 'We could not send your Yap right now. Please try again or email kerryyapspodcast@gmail.com.';
+    }
+  });
+</script>
+</body>
+</html>
