@@ -476,7 +476,7 @@
     <form class="community-composer" id="communityComposer">
       <div class="community-composer-top">
         <label class="sr-only" for="communityTopic">Topic</label>
-        <input class="community-field community-topic" id="communityTopic" name="topic" type="text" maxlength="48" value="Tech, Culture & Lifestyle" placeholder="Tech, Culture & Lifestyle — or type your own topic" required>
+        <input class="community-field community-topic" id="communityTopic" name="topic" type="text" maxlength="48" placeholder="Tech, Culture & Lifestyle — or type your own topic">
         <label class="sr-only" for="communityAuthor">Name or handle (optional)</label>
         <input class="community-field" id="communityAuthor" name="author" type="text" maxlength="40" placeholder="Name or @handle · optional" autocomplete="nickname">
       </div>
@@ -580,7 +580,7 @@
     const save = () => {
       try { localStorage.setItem(storageKey, JSON.stringify(yaps)); } catch { /* Keep in-memory posting available. */ }
     };
-    const topics = () => [...new Set([defaultTopic, ...yaps.map((yap) => yap.topic).filter(Boolean)])];
+    const topics = () => [...new Set(yaps.map((yap) => yap.topic).filter(Boolean))];
 
     function renderFilters() {
       filters.replaceChildren();
@@ -688,7 +688,7 @@
       yaps = [{ id: createId(), author: authorInput.value.trim() || 'Anonymous', topic, text, flames: 0, mics: 0, replies: [] }, ...yaps];
       activeTopic = 'All';
       save(); renderFilters(); renderFeed();
-      form.reset(); topicInput.value = defaultTopic; counter.textContent = '0/280'; postButton.disabled = true;
+      form.reset(); counter.textContent = '0/280'; postButton.disabled = true;
     });
 
     renderFilters();
