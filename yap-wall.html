@@ -1,253 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yap Wall | Kerry Yaps Podcast</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=Marck+Script&display=swap" rel="stylesheet">
-<style>
-  :root{--mocha:#8B7263;--mocha-deep:#4A3B32;--ink:#1F1B17;--cream:#F4EBE0;--cream-dim:#E7D9C8;--gold:#B8925A;--line:rgba(244,235,224,.28);}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{background:var(--mocha);color:var(--cream);font-family:'Work Sans',sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased;}
-  a{color:inherit;text-decoration:none;}
-  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
-  header{padding:20px 0;background:var(--mocha-deep);border-bottom:1px solid var(--line);}
-  nav{display:flex;align-items:center;justify-content:space-between;gap:20px;}
-  .brand{font-size:15px;letter-spacing:.08em;}
-  .back-link,.nav-link{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--cream-dim);}
-  .back-link:hover,.nav-link:hover{color:var(--cream);}
-  .hero{padding:110px 0 90px;background:var(--mocha-deep);}
-  .eyebrow{display:block;color:var(--gold);font-size:12px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:18px;}
-  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;line-height:1.1;}
-  h1{font-size:clamp(48px,8vw,92px);max-width:780px;}
-  .hero-copy{font-size:clamp(17px,2.2vw,22px);color:var(--cream-dim);max-width:640px;margin:24px 0 32px;}
-  .hero-copy strong{color:var(--cream);font-weight:500;}
-  .button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:14px 24px;border:1px solid var(--cream-dim);border-radius:2px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;transition:background .25s ease,color .25s ease,transform .25s ease;}
-  .button:hover{background:var(--cream);color:var(--mocha-deep);transform:translateY(-2px);}
-  .button-solid{background:var(--cream);color:var(--mocha-deep);border-color:var(--cream);}
-  .button-solid:hover{background:var(--gold);border-color:var(--gold);color:var(--ink);}
-  section{padding:96px 0;}
-  .section-heading{margin-bottom:38px;}
-  h2{font-size:clamp(34px,5vw,56px);}
-  h3{font-size:24px;color:var(--cream);margin-bottom:12px;}
-  .intro-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:56px;align-items:start;}
-  .intro-grid p,.intro-grid li{color:var(--cream-dim);}
-  ul{padding-left:22px;}
-  li{margin-bottom:10px;}
-  .rule-box{border-left:2px solid var(--gold);padding:4px 0 4px 28px;}
-  .submission{background:var(--mocha-deep);}
-  .submission h2{max-width:620px;}
-  .form-note{color:var(--cream-dim);max-width:680px;margin:14px 0 34px;}
-  .yap-form{max-width:760px;display:grid;gap:20px;}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-  .field{display:grid;gap:7px;}
-  .field label{font-size:13px;letter-spacing:.05em;color:var(--cream);}
-  .field small{font-size:12px;color:var(--cream-dim);}
-  .field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:2px;background:rgba(244,235,224,.08);color:var(--cream);font:inherit;padding:12px 14px;}
-  .field select option{color:var(--ink);}
-  .field textarea{min-height:150px;resize:vertical;}
-  .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--gold);outline-offset:2px;}
-  .check-field{display:flex;gap:10px;align-items:flex-start;color:var(--cream-dim);font-size:13px;}
-  .check-field input{width:18px;height:18px;flex:0 0 auto;margin-top:3px;accent-color:var(--gold);}
-  .check-field a{color:var(--cream);text-decoration:underline;}
-  .form-status{min-height:24px;color:var(--cream);}
-  .form-status.success{color:#d8e6c4;}
-  .form-status.error{color:#f0c2a8;}
-  .wall{background:var(--cream);color:var(--ink);}
-  .wall .eyebrow{color:var(--mocha);}
-  .wall h2{color:var(--mocha-deep);}
-  .wall-intro{color:#66554c;max-width:680px;margin-top:12px;}
-  .yap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:38px;}
-  .yap-card{background:#fffaf4;border-top:3px solid var(--gold);padding:26px;min-height:250px;display:flex;flex-direction:column;}
-  .yap-card blockquote{font-family:'Fraunces',serif;font-size:22px;line-height:1.35;color:var(--mocha-deep);}
-  .yap-credit{margin-top:auto;padding-top:24px;color:#66554c;font-size:14px;}
-  .yap-topic{display:block;color:var(--mocha);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-top:6px;}
-  .prompts{background:var(--mocha);}
-  .prompt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 44px;}
-  .prompt-grid li{border-bottom:1px solid var(--line);padding:17px 0;margin:0;color:var(--cream-dim);}
-  .cta{background:var(--mocha-deep);text-align:center;padding:100px 0;}
-  .cta h2{max-width:620px;margin:0 auto 18px;}
-  .cta p{color:var(--cream-dim);max-width:560px;margin:0 auto 30px;}
-  .cta-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
-  footer{background:var(--mocha);padding:34px 0;text-align:center;color:var(--cream-dim);font-size:13px;}
-  footer a{color:var(--cream);}
-  footer a:hover{color:var(--gold);}
-  .footer-links{margin-top:10px;}
-  @media (max-width:760px){.wrap{padding:0 24px;}.hero{padding:80px 0 70px;}section{padding:70px 0;}.intro-grid,.yap-grid,.prompt-grid,.form-row{grid-template-columns:1fr;gap:26px;}.yap-card{min-height:220px;}.nav-link{display:none;}}
-  @media (max-width:480px){.wrap{padding:0 16px;}h1{font-size:48px;}.button{width:100%;}.cta-actions{flex-direction:column;align-items:stretch;}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Drop a take, react, and yap back with the Kerry Yaps Podcast community.">
+  <title>The Yap Wall | Kerry Yaps Podcast</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:dark;--espresso:#1C1413;--panel:#241917;--cream:#F3E7DA;--cream-bright:#F7EFE5;--muted:#A89F91;--gold:#D4AF37;--border:#3E2723;--border-soft:#34221F;--serif:'Fraunces',Georgia,serif;--sans:'Work Sans',Arial,sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{min-height:100vh;margin:0;background:radial-gradient(ellipse at 50% -15%,#382421 0,transparent 48%),var(--espresso);color:var(--cream);font-family:var(--sans);-webkit-font-smoothing:antialiased}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.site-header{border-bottom:1px solid rgba(212,175,55,.12);background:rgba(28,20,19,.78);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}.nav{width:min(100% - 40px,960px);min-height:64px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-size:12px;font-weight:600;letter-spacing:.14em}.back-link{color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}.back-link:hover{color:var(--gold)}main{width:min(100% - 32px,680px);margin:0 auto;padding:54px 0 32px}.intro{text-align:center;margin:0 0 30px}.eyebrow{display:inline-block;margin-bottom:12px;color:var(--gold);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}.intro h1{margin:0;color:var(--cream-bright);font:500 clamp(40px,9vw,58px)/1.05 var(--serif);letter-spacing:-.035em}.intro p{max-width:510px;margin:14px auto 0;color:var(--muted);font-size:14px;line-height:1.75}.panel{border:1px solid var(--border);border-radius:20px;background:linear-gradient(145deg,rgba(42,30,28,.94),rgba(36,25,23,.92));box-shadow:0 22px 70px rgba(0,0,0,.2)}.composer{padding:20px;margin-bottom:24px}.composer-top{display:flex;gap:9px}.field{min-width:0;border:1px solid var(--border);border-radius:11px;background:var(--espresso);color:var(--cream-bright);outline:none;transition:border-color .18s,box-shadow .18s}.field:focus{border-color:rgba(212,175,55,.75);box-shadow:0 0 0 3px rgba(212,175,55,.1)}select.field{max-width:48%;padding:10px 12px;color:var(--gold);font-size:12px}.author-field{flex:1;padding:10px 12px;font-size:12px}.author-field::placeholder,.take-field::placeholder,.reply-field::placeholder{color:#76685f}.take-field{display:block;width:100%;min-height:100px;margin-top:10px;padding:13px;resize:vertical;font-size:14px;line-height:1.6}.composer-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:11px}.hint,.counter{color:#82766b;font-size:11px}.post-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:39px;padding:0 15px;border:0;border-radius:11px;background:var(--gold);color:var(--espresso);font-size:12px;font-weight:600;transition:transform .18s,background .18s}.post-button:hover:not(:disabled){transform:translateY(-1px);background:#e2c65e}.post-button:disabled{cursor:not-allowed;opacity:.4}.filters-wrap{margin:0 0 16px}.filters{display:flex;gap:8px;overflow-x:auto;padding:2px 1px 7px;scrollbar-width:none}.filter-chip{flex:0 0 auto;min-height:34px;padding:0 14px;border:1px solid var(--border);border-radius:999px;background:var(--panel);color:var(--muted);font-size:11px;transition:all .18s}.filter-chip:hover{color:var(--cream)}.filter-chip[aria-pressed="true"]{border-color:var(--gold);background:var(--gold);color:var(--espresso);font-weight:600}.stream-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 12px}.stream-head h2{margin:0;color:var(--cream-bright);font:500 24px/1.2 var(--serif)}.stream-count{color:#82766b;font-size:11px}.feed{display:grid;gap:12px}.yap-card{padding:18px 19px;border:1px solid var(--border);border-radius:19px;background:rgba(36,25,23,.9);box-shadow:0 12px 35px rgba(0,0,0,.12);animation:arrive .24s ease both}@keyframes arrive{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}.card-meta{display:flex;align-items:center;justify-content:space-between;gap:12px}.author{overflow:hidden;color:var(--cream-bright);font-size:12px;font-weight:600;text-overflow:ellipsis;white-space:nowrap}.location{color:#7a6f64;font-weight:400}.tag{flex:0 0 auto;padding:5px 9px;border:1px solid rgba(212,175,55,.2);border-radius:999px;background:rgba(212,175,55,.06);color:var(--gold);font-size:10px}.quote{margin:14px 0 16px;color:var(--cream);font-size:14px;line-height:1.75;overflow-wrap:anywhere;white-space:pre-wrap}.card-actions{display:flex;align-items:center;gap:14px;padding-top:11px;border-top:1px solid var(--border-soft)}.reaction,.reply-toggle{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:32px;padding:0 3px;border:0;background:transparent;color:var(--muted);font-size:11px;transition:color .16s}.reaction:hover,.reply-toggle:hover{color:var(--cream-bright)}.reaction-fire{color:#e07a5f}.reply-toggle{margin-left:auto}.reply-toggle svg,.post-button svg{width:14px;height:14px}.replies{display:grid;gap:10px;margin-top:14px;padding:2px 0 2px 13px;border-left:1px solid rgba(212,175,55,.34)}.reply{font-size:11px;line-height:1.65}.reply-author{margin-right:5px;color:var(--gold);font-weight:600}.reply-copy{color:#d4c5b8;overflow-wrap:anywhere}.reply-form{display:flex;gap:8px;margin-top:13px}.reply-field{flex:1;min-width:0;padding:10px 12px;font-size:12px}.reply-submit{padding:0 13px;border:1px solid rgba(212,175,55,.34);border-radius:10px;background:rgba(212,175,55,.1);color:var(--gold);font-size:11px;font-weight:600}.reply-submit:hover:not(:disabled){background:rgba(212,175,55,.2)}.reply-submit:disabled{opacity:.4}.empty{padding:26px;border:1px dashed var(--border);border-radius:18px;color:var(--muted);font-size:13px;text-align:center}.footer-note{margin:25px auto 0;color:#74695f;font-size:11px;line-height:1.7;text-align:center}.site-footer{padding:17px 16px 26px;color:#897b70;font-size:11px;text-align:center}.site-footer a:hover{color:var(--gold)}.focus-visible:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+    @media(min-width:700px){main{padding-top:68px}.composer{padding:22px}.yap-card{padding:20px 22px}.quote{font-size:15px}}
+    @media(max-width:420px){.nav{width:calc(100% - 28px)}main{width:calc(100% - 24px);padding-top:38px}.composer{padding:15px}.intro p{font-size:13px}.hint{max-width:175px;line-height:1.5}.yap-card{padding:16px}.card-actions{gap:11px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <nav aria-label="Page navigation">
-      <a href="index.html" class="brand">KERRY YAPS PODCAST</a>
-      <a href="index.html#episodes" class="nav-link">Listen to episodes</a>
-      <a href="index.html" class="back-link">Back to podcast</a>
+  <header class="site-header">
+    <nav class="nav" aria-label="Page navigation">
+      <a class="brand" href="index.html">KERRY YAPS PODCAST</a>
+      <a class="back-link" href="index.html">Back to podcast</a>
     </nav>
-  </div>
-</header>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <span class="eyebrow">Community board</span>
+      <h1 id="page-title">The Yap Wall</h1>
+      <p>Drop a take, share a lesson, and keep the conversation going. Unfiltered opinions, warm company.</p>
+    </section>
 
-<main>
-  <section class="hero">
-    <div class="wrap">
-      <span class="eyebrow">A curated community space</span>
-      <h1>The Yap Wall</h1>
-      <p class="hero-copy"><strong>Your thoughts belong in the conversation.</strong><br>Drop a question, a story, a lesson, an unpopular opinion, or a topic you want to hear explored on Kerry Yaps Podcast.</p>
-      <a href="#submit-yap" class="button button-solid">Drop a Yap</a>
-    </div>
-  </section>
-
-  <section class="submission" id="submit-yap">
-    <div class="wrap">
-      <span class="eyebrow">Submit for review</span>
-      <h2>Put your thought on the table.</h2>
-      <p class="form-note">Your Yap goes to the Kerry Yaps Podcast team first. It will never appear publicly without review and your permission. You can choose Anonymous, a first name, or a handle for credit.</p>
-      <form class="yap-form" name="yap-wall" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="yap-form">
-        <input type="hidden" name="form-name" value="yap-wall">
-        <div hidden><label>Do not fill this out: <input name="bot-field"></label></div>
-        <div class="field">
-          <label for="yap-message">What do you want to yap about? *</label>
-          <textarea id="yap-message" name="yap-message" required></textarea>
-        </div>
-        <div class="form-row">
-          <div class="field">
-            <label for="topic">Choose a topic *</label>
-            <select id="topic" name="topic" required>
-              <option value="">Select a topic</option>
-              <option>Relationships, dating &amp; friendship</option>
-              <option>Self, mindset &amp; mental health</option>
-              <option>Tech, media &amp; social media</option>
-              <option>Culture, society &amp; power</option>
-              <option>Money, work &amp; ambition</option>
-              <option>Spirituality, meaning &amp; identity</option>
-              <option>Episode request</option>
-              <option>Something else</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="credit">How should we credit you? *</label>
-            <input id="credit" name="credit" placeholder="Anonymous, first name, or handle" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field">
-            <label for="handle">Instagram handle</label>
-            <input id="handle" name="handle" placeholder="Optional">
-          </div>
-          <div class="field">
-            <label for="email">Email address</label>
-            <input id="email" name="email" type="email" placeholder="Optional">
-            <small>Only add this if you would like a reply from Kerry.</small>
-          </div>
-        </div>
-        <label class="check-field"><input type="checkbox" name="reply-request" value="yes"> <span>Yes, I would like a reply from Kerry.</span></label>
-        <label class="check-field"><input type="checkbox" name="handle-display" value="yes"> <span>Yes, I would like my handle shown if my Yap is published.</span></label>
-        <label class="check-field"><input type="checkbox" name="publication-consent" value="yes" required> <span>I understand that my submission will be reviewed before publication and may be selected for the Yap Wall, social media, episode show notes, or podcast discussion. I give Kerry Yaps Podcast permission to edit it for clarity, length, spelling, and format without changing its intended meaning. I have not included confidential information or personal information about another person without permission, and I understand I can request removal by emailing <a href="mailto:kerryyapspodcast@gmail.com">kerryyapspodcast@gmail.com</a>. *</span></label>
-        <label class="check-field"><input type="checkbox" name="newsletter-consent" value="yes"> <span>Optional: send me occasional Kerry Yaps Podcast updates and new-episode alerts.</span></label>
-        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-        <div><button type="submit" class="button button-solid">Send for review</button></div>
-      </form>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap intro-grid">
-      <div>
-        <span class="eyebrow">Before you yap</span>
-        <h2>Keep it kind, relevant, and respectful.</h2>
+    <form id="composer" class="composer panel">
+      <div class="composer-top">
+        <label class="sr-only" for="topic">Choose a topic</label>
+        <select class="field" id="topic" name="topic">
+          <option>Relationships</option><option selected>Mindset</option><option>Tech &amp; AI</option><option>Culture</option><option>Money &amp; Ambition</option>
+        </select>
+        <label class="sr-only" for="author">Your handle (optional)</label>
+        <input class="field author-field" id="author" name="author" type="text" maxlength="40" placeholder="Name or @handle · optional" autocomplete="nickname">
       </div>
-      <div class="rule-box">
-        <p>Please do not share private information about yourself or anyone else, including phone numbers, addresses, workplaces, medical details, or identifying details about someone who has not agreed to be named.</p>
-        <p>Every submission is reviewed before publication. We may edit for clarity and length, publish anonymously, decline, or remove submissions that are harmful, defamatory, discriminatory, spammy, off-topic, or disclose someone's private information.</p>
+      <label class="sr-only" for="take">Put your thought on the table</label>
+      <textarea class="field take-field" id="take" name="take" maxlength="280" rows="3" placeholder="Put your thought on the table…" required></textarea>
+      <div class="composer-bottom">
+        <span class="hint"><span id="char-count" class="counter" aria-live="polite">0/280</span> · Saved on this device only</span>
+        <button class="post-button" id="post-button" type="submit" disabled>Post Yap <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
       </div>
-    </div>
-  </section>
+    </form>
 
-  <section class="wall" id="featured-yaps">
-    <div class="wrap">
-      <div class="section-heading">
-        <span class="eyebrow">Selected submissions</span>
-        <h2>Featured Yaps</h2>
-        <p class="wall-intro">Selected Yaps may appear here, in episode show notes, or be discussed on the podcast, always with the name or handle chosen by the sender.</p>
-      </div>
-      <div class="yap-grid">
-        <article class="yap-card">
-          <blockquote>“The biggest friendship red flag is feeling like you must shrink yourself to keep the peace.”</blockquote>
-          <p class="yap-credit">- Anonymous, Nairobi<span class="yap-topic">Friendship &amp; Boundaries</span></p>
-        </article>
-        <article class="yap-card">
-          <blockquote>“Maybe the problem is not that we overthink; maybe we keep ignoring what we already know.”</blockquote>
-          <p class="yap-credit">- @thequiettake<span class="yap-topic">Self-reflection</span></p>
-        </article>
-        <article class="yap-card">
-          <blockquote>“I need an episode on black tax - not only the money, but the guilt of saying no.”</blockquote>
-          <p class="yap-credit">- Anonymous<span class="yap-topic">Topic request: Money &amp; Family</span></p>
-        </article>
-      </div>
-    </div>
-  </section>
+    <nav class="filters-wrap" aria-label="Filter yaps by category">
+      <div class="filters" id="filters"></div>
+    </nav>
+    <div class="stream-head"><h2>On the table</h2><span class="stream-count" id="stream-count" aria-live="polite"></span></div>
+    <section class="feed" id="feed" aria-label="Community yaps"></section>
+    <p class="footer-note">Selected community takes get featured and discussed on Kerry Yaps Podcast. Moderated for safety.</p>
+  </main>
+  <footer class="site-footer">
+    <span>© 2026 Kerry Yaps Podcast</span> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+  </footer>
 
-  <section class="prompts">
-    <div class="wrap">
-      <div class="section-heading">
-        <span class="eyebrow">Bring a thought to the wall</span>
-        <h2>Start with a prompt.</h2>
-      </div>
-      <ul class="prompt-grid">
-        <li>What is something society has normalized that needs to be questioned?</li>
-        <li>What is a friendship lesson you learned the hard way?</li>
-        <li>What is one relationship ick that signals a deeper value?</li>
-        <li>What is your current “maybe the problem is me” realization?</li>
-        <li>What is a money conversation people avoid having?</li>
-        <li>What topic should Kerry yap about next?</li>
-        <li>What is one thing you wish you knew in your early twenties?</li>
-        <li>What is your unpopular but respectful take on dating, culture, or ambition?</li>
-        <li>What helps you stay grounded when social media becomes too loud?</li>
-        <li>What is a red flag people excuse too easily?</li>
-      </ul>
-    </div>
-  </section>
+  <script>
+    (() => {
+      const categories = ['All', 'Relationships', 'Mindset', 'Tech & AI', 'Culture', 'Money & Ambition'];
+      const storageKey = 'kerry-yaps-community-feed-v1';
+      const seedYaps = [
+        {id:'seed-1',author:'Anonymous',location:'Nairobi',category:'Relationships',text:'The biggest friendship red flag is feeling like you have to shrink yourself just to keep the peace.',flames:38,mics:24,replies:[{id:'seed-r1',author:'@thequiettake',text:'And when you finally speak at full volume, they call you difficult.'}]},
+        {id:'seed-2',author:'@thequiettake',location:'',category:'Mindset',text:'Maybe the problem isn’t that we overthink. Maybe we keep ignoring what we already know.',flames:52,mics:19,replies:[]},
+        {id:'seed-3',author:'Anonymous',location:'Nairobi',category:'Money & Ambition',text:'We need an episode on black tax—not just the money part, but the silent emotional guilt of having boundaries.',flames:64,mics:41,replies:[]},
+      ];
+      const feed = document.getElementById('feed');
+      const filters = document.getElementById('filters');
+      const count = document.getElementById('stream-count');
+      const form = document.getElementById('composer');
+      const authorInput = document.getElementById('author');
+      const topicInput = document.getElementById('topic');
+      const takeInput = document.getElementById('take');
+      const charCount = document.getElementById('char-count');
+      const postButton = document.getElementById('post-button');
+      let yaps = seedYaps;
+      let activeCategory = 'All';
+      let openReplyId = null;
+      let replyDrafts = {};
 
-  <section class="cta">
-    <div class="wrap">
-      <h2>Keep the conversation going.</h2>
-      <p>Have more to say? Send a Yap, follow the podcast, and join the collective. Every submission is reviewed before it appears publicly.</p>
-      <div class="cta-actions">
-        <a href="#submit-yap" class="button button-solid">Drop a Yap</a>
-        <a href="https://open.spotify.com/show/6NKvVwbpM24piEuVzE9Fcv" target="_blank" rel="noopener" class="button">Listen on Spotify</a>
-      </div>
-    </div>
-  </section>
-</main>
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) yaps = parsed;
+        }
+      } catch { /* Keep the feed available when local storage is blocked. */ }
 
-<footer>
-  <div class="wrap">
-    <div>&copy; 2026 Kerry Yaps Podcast</div>
-    <div class="footer-links"><a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a> &middot; <a href="disclaimer.html">Disclaimer</a> &middot; <a href="dmca.html">Copyright</a> &middot; <a href="mailto:kerryyapspodcast@gmail.com">Email</a></div>
-  </div>
-</footer>
-<script>
-  const yapForm = document.getElementById('yap-form');
-  const formStatus = document.getElementById('form-status');
-  yapForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    formStatus.className = 'form-status';
-    formStatus.textContent = 'Sending your Yap for review...';
-    const formData = new FormData(yapForm);
-    try {
-      await fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams(formData).toString()});
-      yapForm.reset();
-      formStatus.className = 'form-status success';
-      formStatus.textContent = 'Your Yap has landed. Thanks for adding to the collective; every submission is reviewed before it appears publicly.';
-    } catch (error) {
-      formStatus.className = 'form-status error';
-      formStatus.textContent = 'We could not send your Yap right now. Please try again or email kerryyapspodcast@gmail.com.';
-    }
-  });
-</script>
+      const makeId = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const node = (tag, className, text) => {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+      };
+      const icon = (paths) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '1.8'); svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round'); svg.setAttribute('aria-hidden', 'true');
+        paths.forEach((d) => { const path = document.createElementNS('http://www.w3.org/2000/svg', 'path'); path.setAttribute('d', d); svg.append(path); });
+        return svg;
+      };
+      function save() {
+        try { localStorage.setItem(storageKey, JSON.stringify(yaps)); } catch { /* In-memory updates still work. */ }
+      }
+      function makeAction(label, className, click, iconPaths) {
+        const button = node('button', className);
+        button.type = 'button'; button.setAttribute('aria-label', label);
+        if (iconPaths) button.append(icon(iconPaths));
+        button.addEventListener('click', click);
+        return button;
+      }
+      function renderFilters() {
+        filters.replaceChildren();
+        categories.forEach((category) => {
+          const button = node('button', 'filter-chip', category);
+          button.type = 'button'; button.setAttribute('aria-pressed', String(activeCategory === category));
+          button.addEventListener('click', () => { activeCategory = category; renderFilters(); renderFeed(); });
+          filters.append(button);
+        });
+      }
+      function renderFeed() {
+        const visible = activeCategory === 'All' ? yaps : yaps.filter((yap) => yap.category === activeCategory);
+        count.textContent = `${visible.length} ${visible.length === 1 ? 'yap' : 'yaps'}`;
+        feed.replaceChildren();
+        if (!visible.length) {
+          feed.append(node('p', 'empty', 'No yaps in this category yet. Be the first to start the conversation.'));
+          return;
+        }
+        visible.forEach((yap) => {
+          const card = node('article', 'yap-card');
+          const meta = node('div', 'card-meta');
+          const name = node('span', 'author', yap.author);
+          if (yap.location) name.append(node('span', 'location', ` · ${yap.location}`));
+          meta.append(name, node('span', 'tag', yap.category));
+          const quote = node('p', 'quote', `“${yap.text}”`);
+          const actions = node('div', 'card-actions');
+          const flameButton = makeAction(`React with fire, ${yap.flames} reactions`, 'reaction', () => {
+            yaps = yaps.map((item) => item.id === yap.id ? {...item,flames:item.flames + 1} : item); save(); renderFeed();
+          });
+          const flameIcon = icon(['M12 22c4 0 7-2.7 7-6.5 0-2.7-1.5-4.8-4.4-7.5.3 2.4-1 3.7-2.2 4.1C13 7.5 11.6 4.3 8.3 2 9 6.6 5 9.1 5 14.3 5 18.8 7.7 22 12 22Z','M12 22c-1.8 0-3-1.2-3-3 0-1.2.7-2.1 2-3.2.2 1.1.6 1.6 1.2 1.8.2-1.3.8-2.2 1.7-3.1.8 1.2 1.1 2.2 1.1 3.6 0 2.4-1.1 3.9-3 3.9Z']); flameIcon.classList.add('reaction-fire');
+          flameButton.append(flameIcon, node('span', '', yap.flames));
+          const micButton = makeAction(`React with microphone, ${yap.mics} reactions`, 'reaction', () => {
+            yaps = yaps.map((item) => item.id === yap.id ? {...item,mics:item.mics + 1} : item); save(); renderFeed();
+          });
+          micButton.append(node('span', '', '🎙️'), node('span', '', yap.mics));
+          const replyButton = makeAction(`${yap.replies.length} yap back`, 'reply-toggle', () => {
+            openReplyId = openReplyId === yap.id ? null : yap.id; renderFeed();
+          }, ['M21 15a4 4 0 0 1-4 4H7l-4 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z']);
+          replyButton.append(node('span', '', `${yap.replies.length} yap back`)); replyButton.setAttribute('aria-expanded', String(openReplyId === yap.id));
+          actions.append(flameButton, micButton, replyButton);
+          card.append(meta, quote, actions);
+          if (openReplyId === yap.id) {
+            if (yap.replies.length) {
+              const replies = node('div', 'replies');
+              yap.replies.forEach((reply) => {
+                const line = node('div', 'reply'); line.append(node('span', 'reply-author', `${reply.author}: `), node('span', 'reply-copy', reply.text)); replies.append(line);
+              });
+              card.append(replies);
+            }
+            const replyForm = node('form', 'reply-form');
+            const replyInput = node('input', 'field reply-field'); replyInput.type = 'text'; replyInput.maxLength = 280; replyInput.placeholder = 'Yap back…'; replyInput.setAttribute('aria-label', `Reply to ${yap.author}`); replyInput.value = replyDrafts[yap.id] || '';
+            const sendReply = node('button', 'reply-submit', 'Reply'); sendReply.type = 'submit'; sendReply.disabled = !replyInput.value.trim();
+            replyInput.addEventListener('input', () => { replyDrafts[yap.id] = replyInput.value; sendReply.disabled = !replyInput.value.trim(); });
+            replyForm.addEventListener('submit', (event) => {
+              event.preventDefault(); const text = replyInput.value.trim(); if (!text) return;
+              yaps = yaps.map((item) => item.id === yap.id ? {...item,replies:[...item.replies,{id:makeId(),author:authorInput.value.trim() || 'Listener',text}]} : item);
+              replyDrafts[yap.id] = ''; save(); renderFeed();
+            });
+            replyForm.append(replyInput, sendReply); card.append(replyForm);
+          }
+          feed.append(card);
+        });
+      }
+      takeInput.addEventListener('input', () => {
+        charCount.textContent = `${takeInput.value.length}/280`;
+        postButton.disabled = !takeInput.value.trim();
+      });
+      form.addEventListener('submit', (event) => {
+        event.preventDefault(); const text = takeInput.value.trim(); if (!text) return;
+        yaps = [{id:makeId(),author:authorInput.value.trim() || 'Anonymous',location:'',category:topicInput.value,text,flames:0,mics:0,replies:[]},...yaps];
+        activeCategory = 'All'; renderFilters(); save(); renderFeed();
+        form.reset(); charCount.textContent = '0/280'; postButton.disabled = true; topicInput.value = 'Mindset';
+      });
+      renderFilters(); renderFeed();
+    })();
+  </script>
 </body>
 </html>
