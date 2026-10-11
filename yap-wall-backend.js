@@ -1,0 +1,92 @@
+(() => {
+  const config = window.YAP_WALL_SUPABASE_CONFIG || {};
+  const baseUrl = (config.url || '').replace(/\/+$/, '');
+  const anonKey = config.anonKey || '';
+
+  const isConfigured = () => Boolean(baseUrl && anonKey);
+
+  async function request(path, { method = 'GET', body, prefer = 'return=minimal' } = {}) {
+    if (!isConfigured()) {
+      throw new Error('Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in your .env file, then restart the server.');
+    }
+
+    const response = await fetch(`${baseUrl}/rest/v1/${path}`, {
+      method,
+      headers: {
+        apikey: anonKey,
+        Authorization: `Bearer ${anonKey}`,
+        'Content-Type': 'application/json',
+        Prefer: prefer,
+      },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const detail = await response.json().catch(() => null);
+      throw new Error(detail?.message || `Supabase request failed (${response.status}).`);
+    }
+
+    if (response.status === 204) return null;
+    return response.json().catch(() => null);
+  }
+
+  function mapYap(row) {
+    return {
+      id: row.id,
+      author: row.author,
+      topic: row.topic,
+      category: row.topic,
+      text: row.text,
+      flames: row.flames,
+      mics: row.mics,
+      createdAt: row.created_at,
+      replies: (row.replies || []).map((reply) => ({
+        id: reply.id,
+        author: reply.author,
+        text: reply.text,
+        createdAt: reply.created_at,
+      })),
+    };
+  }
+
+  async function loadYaps() {
+    const rows = await request('yaps?select=id,author,topic,text,flames,mics,created_at,replies(id,author,text,created_at)&status=eq.approved&order=created_at.desc');
+    return (rows || []).map(mapYap);
+  }
+
+  async function submitYap({ author, topic, text }) {
+    await request('yaps', {
+      method: 'POST',
+      body: { author, topic, text, status: 'pending' },
+    });
+  }
+
+  async function submitReply({ yapId, author, text }) {
+    await request('replies', {
+      method: 'POST',
+      body: { yap_id: yapId, author, text, status: 'pending' },
+    });
+  }
+
+  function getVisitorId() {
+    const key = 'kerry-yaps-wall-visitor-id';
+    let visitorId = window.localStorage.getItem(key);
+    if (!visitorId) {
+      visitorId = globalThis.crypto?.randomUUID?.();
+      if (!visitorId) throw new Error('This browser cannot create a secure reaction ID.');
+      window.localStorage.setItem(key, visitorId);
+    }
+    return visitorId;
+  }
+
+  async function react({ yapId, type }) {
+    const result = await request('rpc/react_to_yap', {
+      method: 'POST',
+      prefer: 'return=representation',
+      body: { p_yap_id: yapId, p_reaction: type, p_visitor_id: getVisitorId() },
+    });
+    return Array.isArray(result) ? result[0] : result;
+  }
+
+  window.YapWallBackend = { isConfigured, loadYaps, submitYap, submitReply, react };
+})();
