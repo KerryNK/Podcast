@@ -611,6 +611,41 @@
     };
     const topics = () => [...new Set(yaps.map((yap) => yap.topic).filter(Boolean))];
 
+    feed.addEventListener('click', (event) => {
+      const replyToggle = event.target.closest('.community-reply-toggle');
+      if (!replyToggle || !feed.contains(replyToggle)) return;
+      const yapId = replyToggle.dataset.id;
+      if (!yaps.some((yap) => String(yap.id) === yapId)) return;
+      openReplyId = String(openReplyId) === yapId ? null : yapId;
+      renderFeed();
+    });
+
+    feed.addEventListener('submit', async (event) => {
+      const replyForm = event.target.closest('.community-reply-form');
+      if (!replyForm || !feed.contains(replyForm)) return;
+      event.preventDefault();
+
+      const yapId = replyForm.dataset.yapId;
+      const yap = yaps.find((item) => String(item.id) === yapId);
+      const replyInput = replyForm.querySelector('.community-reply-field');
+      const text = replyInput?.value.trim();
+      if (!yap || !text) return;
+
+      try {
+        const createdReply = await window.YapWallBackend.submitReply({
+          yapId: yap.id,
+          author: authorInput.value.trim() || 'Yap Circle',
+          text,
+        });
+        replyDrafts[yapId] = '';
+        yaps = yaps.map((item) => String(item.id) === yapId
+          ? { ...item, replies: [...item.replies, createdReply] }
+          : item);
+        renderFeed();
+        status.textContent = 'Your reply was posted.';
+      } catch (error) { status.textContent = error.message; }
+    });
+
     function renderFilters() {
       filters.replaceChildren();
       ['All', ...topics()].forEach((topic) => {
@@ -663,13 +698,11 @@
           } catch (error) { status.textContent = error.message; }
         });
 
-        const replyToggle = makeNode('button', 'community-action community-reply-toggle', `↩ Yap Back · ${yap.replies.length}`);
+        const replyToggle = makeNode('button', 'community-action community-reply-toggle yap-back-btn', `↩ Yap Back · ${yap.replies.length}`);
         replyToggle.type = 'button';
+        replyToggle.dataset.id = yap.id;
+        replyToggle.dataset.author = yap.author;
         replyToggle.setAttribute('aria-expanded', String(openReplyId === yap.id));
-        replyToggle.addEventListener('click', () => {
-          openReplyId = openReplyId === yap.id ? null : yap.id;
-          renderFeed();
-        });
         actions.append(flame, mic, replyToggle);
         card.append(meta, quote, actions);
 
@@ -684,6 +717,7 @@
             card.append(replies);
           }
           const replyForm = makeNode('form', 'community-reply-form');
+          replyForm.dataset.yapId = yap.id;
           const replyInput = makeNode('input', 'community-field community-reply-field');
           replyInput.type = 'text'; replyInput.maxLength = 280; replyInput.placeholder = 'Yap back…';
           replyInput.setAttribute('aria-label', `Reply to ${yap.author}`);
@@ -694,26 +728,55 @@
             replyDrafts[yap.id] = replyInput.value;
             replyButton.disabled = !replyInput.value.trim();
           });
-          replyForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const text = replyInput.value.trim();
-            if (!text) return;
-            try {
-              const createdReply = await window.YapWallBackend.submitReply({ yapId: yap.id, author: authorInput.value.trim() || 'Yap Circle', text });
-              replyDrafts[yap.id] = '';
-              if (createdReply) {
-                yaps = yaps.map((item) => item.id === yap.id ? { ...item, replies: [...item.replies, createdReply] } : item);
-                renderFeed();
-              }
-              status.textContent = 'Your reply was posted.';
-            } catch (error) { status.textContent = error.message; }
-          });
           replyForm.append(replyInput, replyButton);
           card.append(replyForm);
         }
         feed.append(card);
       });
     }
+
+    feed.addEventListener('click', (event) => {
+      const replyToggle = event.target.closest?.('.yap-back-btn');
+      if (!replyToggle || !feed.contains(replyToggle)) return;
+
+      const yapId = replyToggle.dataset.id;
+      if (!yaps.some((yap) => yap.id === yapId)) return;
+      openReplyId = openReplyId === yapId ? null : yapId;
+      renderFeed();
+      if (openReplyId === yapId) {
+        feed.querySelector('.community-reply-field')?.focus();
+      }
+    });
+
+    feed.addEventListener('submit', async (event) => {
+      const replyForm = event.target.closest?.('.community-reply-form');
+      if (!replyForm || !feed.contains(replyForm)) return;
+
+      event.preventDefault();
+      const yapId = replyForm.dataset.yapId;
+      const replyInput = replyForm.querySelector('.community-reply-field');
+      const replyButton = replyForm.querySelector('.community-reply-submit');
+      const text = replyInput?.value.trim();
+      if (!yaps.some((yap) => yap.id === yapId) || !text) return;
+
+      replyButton.disabled = true;
+      try {
+        const createdReply = await window.YapWallBackend.submitReply({
+          yapId,
+          author: authorInput.value.trim() || 'Yap Circle',
+          text,
+        });
+        replyDrafts[yapId] = '';
+        yaps = yaps.map((yap) => yap.id === yapId
+          ? { ...yap, replies: [...yap.replies, createdReply] }
+          : yap);
+        renderFeed();
+        status.textContent = 'Your reply was posted.';
+      } catch (error) {
+        replyButton.disabled = !replyInput.value.trim();
+        status.textContent = error.message;
+      }
+    });
 
     takeInput.addEventListener('input', () => {
       counter.textContent = `${takeInput.value.length}/280`;

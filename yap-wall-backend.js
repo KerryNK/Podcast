@@ -81,7 +81,7 @@
       prefer: 'return=representation',
     });
     const row = Array.isArray(rows) ? rows[0] : rows;
-    if (!row) return null;
+    if (!row) throw new Error('Your reply could not be confirmed by Supabase. Check the public SELECT and INSERT policies for replies.');
     return {
       id: row.id,
       author: row.author,
