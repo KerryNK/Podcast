@@ -48,6 +48,7 @@
   }
   header.scrolled{
     background:rgba(74,59,50,0.92);
+    -webkit-backdrop-filter:blur(8px);
     backdrop-filter:blur(8px);
     padding:12px 0;
     box-shadow:0 1px 0 var(--line);
@@ -105,6 +106,7 @@
     color:rgba(31,27,23,0.12);
     letter-spacing:-0.02em;
     line-height:1;
+    -webkit-user-select:none;
     user-select:none;
     pointer-events:none;
     white-space:nowrap;
@@ -342,6 +344,11 @@
   .legal-content h2 { font-size: 20px; margin: 32px 0 12px; color: var(--cream); font-weight: 600; }
   .legal-content p { line-height: 1.6; color: var(--cream-dim); margin-bottom: 16px; }
   .legal-content a { color: var(--gold); text-decoration: underline; }
+  .legal-footer-content{display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;}
+  .legal-footer-links{font-size:13px;color:var(--cream-dim);}
+  .legal-footer-nav a{margin-left:12px;}
+  .legal-footer-links:not(.legal-footer-nav) a:first-child{margin-right:12px;}
+  .legal-footer-links a:not(:first-child){margin-left:12px;}
 
 </style>
 </head>
@@ -407,13 +414,13 @@
 </section>
 
 <footer>
-  <div class="wrap" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:20px;">
+  <div class="wrap legal-footer-content">
     <div>&copy; 2026 Kerry Yaps Podcast</div>
-    <div style="font-size:13px; color:var(--cream-dim);">
-      <a href="yap-wall.html" style="margin-right:12px;">Yap Wall</a> &middot; <a href="privacy.html" style="margin-left:12px;">Privacy</a> &middot; <a href="terms.html" style="margin-left:12px;">Terms &amp; Conditions</a> &middot; <a href="disclaimer.html" style="margin-left:12px;">Disclaimer</a> &middot; <a href="dmca.html" style="margin-left:12px;">Copyright</a>
+    <div class="legal-footer-links legal-footer-nav">
+      <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms &amp; Conditions</a> &middot; <a href="disclaimer.html">Disclaimer</a> &middot; <a href="dmca.html">Copyright</a>
     </div>
-    <div style="font-size:13px; color:var(--cream-dim);">
-      <a href="mailto:kerryyapspodcast@gmail.com" style="margin-right:12px;">Email</a> &middot; <a href="https://www.instagram.com/kerryyapspodcast" style="margin-left:12px;" target="_blank" rel="noopener">Instagram</a>
+    <div class="legal-footer-links">
+      <a href="mailto:kerryyapspodcast@gmail.com">Email</a> &middot; <a href="https://www.instagram.com/kerryyapspodcast" target="_blank" rel="noopener">Instagram</a>
     </div>
   </div>
 </footer>
