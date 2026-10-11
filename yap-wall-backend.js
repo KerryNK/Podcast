@@ -59,22 +59,32 @@
   }
 
   async function loadYaps() {
-    const rows = await request('yaps?select=id,author,topic,text,flames,mics,created_at,replies(id,author,text,created_at)&status=eq.approved&order=created_at.desc');
+    const rows = await request('yaps?select=id,author,topic,text,flames,mics,created_at,replies(id,author,text,created_at)&order=created_at.desc');
     return (rows || []).map(mapYap);
   }
 
   async function submitYap({ author, topic, text }) {
-    await request('yaps', {
+    const rows = await request('yaps?select=id,author,topic,text,flames,mics,created_at,replies(id,author,text,created_at)', {
       method: 'POST',
       body: { author, topic, text },
     });
+    const row = Array.isArray(rows) ? rows[0] : rows;
+    return row ? mapYap(row) : null;
   }
 
   async function submitReply({ yapId, author, text }) {
-    await request('replies', {
+    const rows = await request('replies?select=id,author,text,created_at', {
       method: 'POST',
       body: { yap_id: yapId, author, text },
     });
+    const row = Array.isArray(rows) ? rows[0] : rows;
+    if (!row) return null;
+    return {
+      id: row.id,
+      author: row.author,
+      text: row.text,
+      createdAt: row.created_at,
+    };
   }
 
   function getVisitorId() {

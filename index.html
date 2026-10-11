@@ -699,10 +699,13 @@
             const text = replyInput.value.trim();
             if (!text) return;
             try {
-              await window.YapWallBackend.submitReply({ yapId: yap.id, author: authorInput.value.trim() || 'Yap Circle', text });
+              const createdReply = await window.YapWallBackend.submitReply({ yapId: yap.id, author: authorInput.value.trim() || 'Yap Circle', text });
               replyDrafts[yap.id] = '';
-              status.textContent = 'Your reply was submitted and will appear after moderation.';
-              await refreshYaps();
+              if (createdReply) {
+                yaps = yaps.map((item) => item.id === yap.id ? { ...item, replies: [...item.replies, createdReply] } : item);
+                renderFeed();
+              }
+              status.textContent = 'Your reply was posted.';
             } catch (error) { status.textContent = error.message; }
           });
           replyForm.append(replyInput, replyButton);
@@ -722,9 +725,14 @@
       const topic = topicInput.value.trim() || defaultTopic;
       if (!text) return;
       try {
-        await window.YapWallBackend.submitYap({ author: authorInput.value.trim() || 'Anonymous', topic, text });
+        const createdYap = await window.YapWallBackend.submitYap({ author: authorInput.value.trim() || 'Anonymous', topic, text });
+        if (createdYap) {
+          yaps = [createdYap, ...yaps];
+          renderFilters();
+          renderFeed();
+        }
         form.reset(); counter.textContent = '0/280'; postButton.disabled = true;
-        status.textContent = 'Your Yap was submitted and will appear after moderation.';
+        status.textContent = 'Your Yap was posted.';
       } catch (error) { status.textContent = error.message; }
     });
 
