@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kerry Yaps Podcast</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=Marck+Script&display=swap" rel="stylesheet">
@@ -732,7 +733,7 @@
     if (!window.YapWallBackend) {
       status.textContent = 'The community wall is unavailable because its backend script could not be loaded.';
     } else if (!window.YapWallBackend.isConfigured()) {
-      status.textContent = 'Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in your .env file, then restart the server.';
+      status.textContent = 'Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in your Vercel project environment variables, then redeploy the site.';
     } else {
       refreshYaps().catch((error) => { status.textContent = error.message; });
     }

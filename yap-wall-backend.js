@@ -5,21 +5,30 @@
 
   const isConfigured = () => Boolean(baseUrl && anonKey);
 
+  function buildSupabaseError(message) {
+    return `Supabase connection failed: ${message} Check the Vercel environment variables for SUPABASE_URL and SUPABASE_ANON_KEY so they match the same Supabase project.`;
+  }
+
   async function request(path, { method = 'GET', body, prefer = 'return=minimal' } = {}) {
     if (!isConfigured()) {
-      throw new Error('Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in your .env file, then restart the server.');
+      throw new Error('Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in your Vercel project environment variables, then redeploy.');
     }
 
-    const response = await fetch(`${baseUrl}/rest/v1/${path}`, {
-      method,
-      headers: {
-        apikey: anonKey,
-        Authorization: `Bearer ${anonKey}`,
-        'Content-Type': 'application/json',
-        Prefer: prefer,
-      },
-      body: body === undefined ? undefined : JSON.stringify(body),
-    });
+    let response;
+    try {
+      response = await fetch(`${baseUrl}/rest/v1/${path}`, {
+        method,
+        headers: {
+          apikey: anonKey,
+          Authorization: `Bearer ${anonKey}`,
+          'Content-Type': 'application/json',
+          Prefer: prefer,
+        },
+        body: body === undefined ? undefined : JSON.stringify(body),
+      });
+    } catch (error) {
+      throw new Error(buildSupabaseError(error instanceof Error ? error.message : 'request failed.'));
+    }
 
     if (!response.ok) {
       const detail = await response.json().catch(() => null);
