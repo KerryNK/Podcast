@@ -3,6 +3,27 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const root = __dirname;
+
+function loadEnvFile() {
+  const envPath = path.join(root, '.env');
+  if (!fs.existsSync(envPath)) return;
+
+  for (const line of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
+    const match = line.match(/^\s*(?:export\s+)?([\w.-]+)\s*=\s*(.*)?\s*$/);
+    if (!match || process.env[match[1]] !== undefined) continue;
+
+    let value = (match[2] || '').trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    } else {
+      value = value.replace(/\s+#.*$/, '').trim();
+    }
+    process.env[match[1]] = value;
+  }
+}
+
+loadEnvFile();
+
 const host = process.env.HOST || '127.0.0.1';
 const port = Number(process.env.PORT || 3000);
 const contentTypes = {
