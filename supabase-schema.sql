@@ -29,10 +29,12 @@ create table if not exists public.yap_reactions (
   primary key (yap_id, visitor_id, reaction)
 );
 
-create index if not exists yaps_approved_created_at_idx
-  on public.yaps (created_at desc) where status = 'approved';
-create index if not exists replies_approved_yap_created_at_idx
-  on public.replies (yap_id, created_at) where status = 'approved';
+drop index if exists public.yaps_approved_created_at_idx;
+create index if not exists yaps_created_at_idx
+  on public.yaps (created_at desc);
+drop index if exists public.replies_approved_yap_created_at_idx;
+create index if not exists replies_yap_created_at_idx
+  on public.replies (yap_id, created_at);
 
 alter table public.yaps enable row level security;
 alter table public.replies enable row level security;
@@ -43,8 +45,11 @@ grant select, insert on public.replies to anon, authenticated;
 revoke all on public.yap_reactions from anon, authenticated;
 
 drop policy if exists "Anyone can read approved yaps" on public.yaps;
-create policy "Anyone can read approved yaps" on public.yaps
-  for select to anon, authenticated using (status = 'approved');
+drop policy if exists "Anyone can read yaps" on public.yaps;
+drop policy if exists "Allow public read" on public.yaps;
+drop policy if exists "Enable read access for all users" on public.yaps;
+create policy "Anyone can read yaps" on public.yaps
+  for select to anon, authenticated using (true);
 
 drop policy if exists "Anyone can submit yaps instantly" on public.yaps;
 create policy "Anyone can submit yaps instantly" on public.yaps
@@ -56,10 +61,10 @@ create policy "Anyone can submit yaps instantly" on public.yaps
   );
 
 drop policy if exists "Anyone can read approved replies to approved yaps" on public.replies;
-create policy "Anyone can read approved replies to approved yaps" on public.replies
+drop policy if exists "Anyone can read replies to yaps" on public.replies;
+create policy "Anyone can read replies to yaps" on public.replies
   for select to anon, authenticated using (
-    status = 'approved'
-    and exists (select 1 from public.yaps where yaps.id = replies.yap_id and yaps.status = 'approved')
+    exists (select 1 from public.yaps where yaps.id = replies.yap_id)
   );
 
 drop policy if exists "Anyone can submit replies instantly" on public.replies;
@@ -68,7 +73,7 @@ create policy "Anyone can submit replies instantly" on public.replies
     status = 'approved'
     and char_length(trim(author)) between 1 and 40
     and char_length(trim(text)) between 1 and 280
-    and exists (select 1 from public.yaps where yaps.id = replies.yap_id and yaps.status = 'approved')
+    and exists (select 1 from public.yaps where yaps.id = replies.yap_id)
   );
 
 create or replace function public.react_to_yap(p_yap_id uuid, p_reaction text, p_visitor_id uuid)
@@ -87,7 +92,7 @@ begin
     raise exception 'A visitor ID is required';
   end if;
 
-  if not exists (select 1 from public.yaps where id = p_yap_id and status = 'approved') then
+  if not exists (select 1 from public.yaps where id = p_yap_id) then
     raise exception 'Yap is unavailable';
   end if;
 

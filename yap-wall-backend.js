@@ -59,23 +59,26 @@
   }
 
   async function loadYaps() {
-    const rows = await request('yaps?select=id,author,topic,text,flames,mics,created_at,replies(id,author,text,created_at)&order=created_at.desc');
+    const rows = await request('yaps?select=*,replies(id,author,text,created_at)&order=created_at.desc');
     return (rows || []).map(mapYap);
   }
 
   async function submitYap({ author, topic, text }) {
-    const rows = await request('yaps?select=id,author,topic,text,flames,mics,created_at,replies(id,author,text,created_at)', {
+    const rows = await request('yaps?select=*,replies(id,author,text,created_at)', {
       method: 'POST',
       body: { author, topic, text },
+      prefer: 'return=representation',
     });
     const row = Array.isArray(rows) ? rows[0] : rows;
-    return row ? mapYap(row) : null;
+    if (!row) throw new Error('Yap was saved, but Supabase did not return the new row. Check the public SELECT policy for yaps.');
+    return mapYap(row);
   }
 
   async function submitReply({ yapId, author, text }) {
     const rows = await request('replies?select=id,author,text,created_at', {
       method: 'POST',
       body: { yap_id: yapId, author, text },
+      prefer: 'return=representation',
     });
     const row = Array.isArray(rows) ? rows[0] : rows;
     if (!row) return null;

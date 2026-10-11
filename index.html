@@ -728,6 +728,7 @@
         const createdYap = await window.YapWallBackend.submitYap({ author: authorInput.value.trim() || 'Anonymous', topic, text });
         if (createdYap) {
           yaps = [createdYap, ...yaps];
+          activeTopic = 'All';
           renderFilters();
           renderFeed();
         }
