@@ -42,10 +42,11 @@
       <label class="sr-only" for="take">Put your thought on the table</label>
       <textarea class="field take-field" id="take" name="take" maxlength="280" rows="3" placeholder="Put your thought on the table…" required></textarea>
       <div class="composer-bottom">
-        <span class="hint"><span id="char-count" class="counter" aria-live="polite">0/280</span> · Saved on this device only</span>
+        <span class="hint"><span id="char-count" class="counter" aria-live="polite">0/280</span> · Posts appear after moderation</span>
         <button class="post-button" id="post-button" type="submit" disabled>Post Yap <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
       </div>
     </form>
+    <p id="supabase-status" class="hint" role="status" aria-live="polite">Loading the community wall…</p>
 
     <nav class="filters-wrap" aria-label="Filter yaps by category">
       <div class="filters" id="filters"></div>
@@ -58,15 +59,11 @@
     <span>© 2026 Kerry Yaps Podcast</span> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
   </footer>
 
+  <script src="supabase-config.js"></script>
+  <script src="yap-wall-backend.js"></script>
   <script>
     (() => {
       const categories = ['All', 'Relationships', 'Mindset', 'Tech & AI', 'Culture', 'Money & Ambition'];
-      const storageKey = 'kerry-yaps-community-feed-v1';
-      const seedYaps = [
-        {id:'seed-1',author:'Anonymous',location:'Nairobi',category:'Relationships',text:'The biggest friendship red flag is feeling like you have to shrink yourself just to keep the peace.',flames:38,mics:24,replies:[{id:'seed-r1',author:'@thequiettake',text:'And when you finally speak at full volume, they call you difficult.'}]},
-        {id:'seed-2',author:'@thequiettake',location:'',category:'Mindset',text:'Maybe the problem isn’t that we overthink. Maybe we keep ignoring what we already know.',flames:52,mics:19,replies:[]},
-        {id:'seed-3',author:'Anonymous',location:'Nairobi',category:'Money & Ambition',text:'We need an episode on black tax, not just the money part, but the silent emotional guilt of having boundaries.',flames:64,mics:41,replies:[]},
-      ];
       const feed = document.getElementById('feed');
       const filters = document.getElementById('filters');
       const count = document.getElementById('stream-count');
@@ -76,20 +73,12 @@
       const takeInput = document.getElementById('take');
       const charCount = document.getElementById('char-count');
       const postButton = document.getElementById('post-button');
-      let yaps = seedYaps;
+      const status = document.getElementById('supabase-status');
+      let yaps = [];
       let activeCategory = 'All';
       let openReplyId = null;
       let replyDrafts = {};
 
-      try {
-        const saved = localStorage.getItem(storageKey);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed)) yaps = parsed;
-        }
-      } catch { /* Keep the feed available when local storage is blocked. */ }
-
-      const makeId = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
       const node = (tag, className, text) => {
         const element = document.createElement(tag);
         if (className) element.className = className;
@@ -102,8 +91,10 @@
         paths.forEach((d) => { const path = document.createElementNS('http://www.w3.org/2000/svg', 'path'); path.setAttribute('d', d); svg.append(path); });
         return svg;
       };
-      function save() {
-        try { localStorage.setItem(storageKey, JSON.stringify(yaps)); } catch { /* In-memory updates still work. */ }
+      async function refreshYaps() {
+        yaps = await window.YapWallBackend.loadYaps();
+        renderFilters();
+        renderFeed();
       }
       function makeAction(label, className, click, iconPaths) {
         const button = node('button', className);
@@ -137,13 +128,21 @@
           meta.append(name, node('span', 'tag', yap.category));
           const quote = node('p', 'quote', `“${yap.text}”`);
           const actions = node('div', 'card-actions');
-          const flameButton = makeAction(`React with fire, ${yap.flames} reactions`, 'reaction', () => {
-            yaps = yaps.map((item) => item.id === yap.id ? {...item,flames:item.flames + 1} : item); save(); renderFeed();
+          const flameButton = makeAction(`React with fire, ${yap.flames} reactions`, 'reaction', async () => {
+            try {
+              const counts = await window.YapWallBackend.react({ yapId: yap.id, type: 'flames' });
+              yaps = yaps.map((item) => item.id === yap.id ? { ...item, ...counts } : item);
+              renderFeed();
+            } catch (error) { status.textContent = error.message; }
           });
           const flameIcon = icon(['M12 22c4 0 7-2.7 7-6.5 0-2.7-1.5-4.8-4.4-7.5.3 2.4-1 3.7-2.2 4.1C13 7.5 11.6 4.3 8.3 2 9 6.6 5 9.1 5 14.3 5 18.8 7.7 22 12 22Z','M12 22c-1.8 0-3-1.2-3-3 0-1.2.7-2.1 2-3.2.2 1.1.6 1.6 1.2 1.8.2-1.3.8-2.2 1.7-3.1.8 1.2 1.1 2.2 1.1 3.6 0 2.4-1.1 3.9-3 3.9Z']); flameIcon.classList.add('reaction-fire');
           flameButton.append(flameIcon, node('span', '', yap.flames));
-          const micButton = makeAction(`React with microphone, ${yap.mics} reactions`, 'reaction', () => {
-            yaps = yaps.map((item) => item.id === yap.id ? {...item,mics:item.mics + 1} : item); save(); renderFeed();
+          const micButton = makeAction(`React with microphone, ${yap.mics} reactions`, 'reaction', async () => {
+            try {
+              const counts = await window.YapWallBackend.react({ yapId: yap.id, type: 'mics' });
+              yaps = yaps.map((item) => item.id === yap.id ? { ...item, ...counts } : item);
+              renderFeed();
+            } catch (error) { status.textContent = error.message; }
           });
           micButton.append(node('span', '', '🎙️'), node('span', '', yap.mics));
           const replyButton = makeAction(`${yap.replies.length} yap back`, 'reply-toggle', () => {
@@ -164,10 +163,14 @@
             const replyInput = node('input', 'field reply-field'); replyInput.type = 'text'; replyInput.maxLength = 280; replyInput.placeholder = 'Yap back…'; replyInput.setAttribute('aria-label', `Reply to ${yap.author}`); replyInput.value = replyDrafts[yap.id] || '';
             const sendReply = node('button', 'reply-submit', 'Reply'); sendReply.type = 'submit'; sendReply.disabled = !replyInput.value.trim();
             replyInput.addEventListener('input', () => { replyDrafts[yap.id] = replyInput.value; sendReply.disabled = !replyInput.value.trim(); });
-            replyForm.addEventListener('submit', (event) => {
+            replyForm.addEventListener('submit', async (event) => {
               event.preventDefault(); const text = replyInput.value.trim(); if (!text) return;
-              yaps = yaps.map((item) => item.id === yap.id ? {...item,replies:[...item.replies,{id:makeId(),author:authorInput.value.trim() || 'Listener',text}]} : item);
-              replyDrafts[yap.id] = ''; save(); renderFeed();
+              try {
+                await window.YapWallBackend.submitReply({ yapId: yap.id, author: authorInput.value.trim() || 'Listener', text });
+                replyDrafts[yap.id] = '';
+                status.textContent = 'Your reply was submitted and will appear after moderation.';
+                await refreshYaps();
+              } catch (error) { status.textContent = error.message; }
             });
             replyForm.append(replyInput, sendReply); card.append(replyForm);
           }
@@ -178,13 +181,20 @@
         charCount.textContent = `${takeInput.value.length}/280`;
         postButton.disabled = !takeInput.value.trim();
       });
-      form.addEventListener('submit', (event) => {
+      form.addEventListener('submit', async (event) => {
         event.preventDefault(); const text = takeInput.value.trim(); if (!text) return;
-        yaps = [{id:makeId(),author:authorInput.value.trim() || 'Anonymous',location:'',category:topicInput.value,text,flames:0,mics:0,replies:[]},...yaps];
-        activeCategory = 'All'; renderFilters(); save(); renderFeed();
-        form.reset(); charCount.textContent = '0/280'; postButton.disabled = true; topicInput.value = 'Mindset';
+        try {
+          await window.YapWallBackend.submitYap({ author: authorInput.value.trim() || 'Anonymous', topic: topicInput.value, text });
+          form.reset(); charCount.textContent = '0/280'; postButton.disabled = true; topicInput.value = 'Mindset';
+          status.textContent = 'Your Yap was submitted and will appear after moderation.';
+        } catch (error) { status.textContent = error.message; }
       });
       renderFilters(); renderFeed();
+      if (!window.YapWallBackend.isConfigured()) {
+        status.textContent = 'Connect Supabase by adding your project URL and anon key to supabase-config.js.';
+      } else {
+        refreshYaps().catch((error) => { status.textContent = error.message; });
+      }
     })();
   </script>
 </body>

@@ -498,6 +498,7 @@
         <button class="community-post" id="communityPost" type="submit" disabled>Post Yap <span aria-hidden="true">↗</span></button>
       </div>
     </form>
+    <p class="community-hint" id="communitySupabaseStatus" role="status" aria-live="polite">Loading the community wall…</p>
 
     <nav class="community-filters" id="communityFilters" aria-label="Filter yaps by topic"></nav>
     <div class="community-stream-heading">
@@ -538,6 +539,8 @@
   </div>
 </footer>
 
+<script src="supabase-config.js"></script>
+<script src="yap-wall-backend.js"></script>
 <script>
   const header = document.getElementById('siteHeader');
   window.addEventListener('scroll', () => {
@@ -561,7 +564,6 @@
 
   (() => {
     const defaultTopic = 'Tech, Culture & Lifestyle';
-    const storageKey = 'kerry-yaps-home-yap-wall-v2';
     const topicInput = document.getElementById('communityTopic');
     const authorInput = document.getElementById('communityAuthor');
     const takeInput = document.getElementById('communityTake');
@@ -571,25 +573,22 @@
     const filters = document.getElementById('communityFilters');
     const feed = document.getElementById('communityFeed');
     const count = document.getElementById('communityCount');
+    const status = document.getElementById('communitySupabaseStatus');
     let yaps = [];
     let activeTopic = 'All';
     let openReplyId = null;
     let replyDrafts = {};
 
-    try {
-      const savedYaps = JSON.parse(localStorage.getItem(storageKey) || '[]');
-      if (Array.isArray(savedYaps)) yaps = savedYaps;
-    } catch { /* The feed remains available if browser storage is blocked. */ }
-
-    const createId = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     const makeNode = (tag, className, text) => {
       const element = document.createElement(tag);
       if (className) element.className = className;
       if (text !== undefined) element.textContent = text;
       return element;
     };
-    const save = () => {
-      try { localStorage.setItem(storageKey, JSON.stringify(yaps)); } catch { /* Keep in-memory posting available. */ }
+    const refreshYaps = async () => {
+      yaps = await window.YapWallBackend.loadYaps();
+      renderFilters();
+      renderFeed();
     };
     const topics = () => [...new Set(yaps.map((yap) => yap.topic).filter(Boolean))];
 
@@ -627,16 +626,22 @@
         const flame = makeNode('button', 'community-action', `🔥 ${yap.flames}`);
         flame.type = 'button';
         flame.setAttribute('aria-label', `React with flames, ${yap.flames} reactions`);
-        flame.addEventListener('click', () => {
-          yaps = yaps.map((item) => item.id === yap.id ? { ...item, flames: item.flames + 1 } : item);
-          save(); renderFeed();
+        flame.addEventListener('click', async () => {
+          try {
+            const counts = await window.YapWallBackend.react({ yapId: yap.id, type: 'flames' });
+            yaps = yaps.map((item) => item.id === yap.id ? { ...item, ...counts } : item);
+            renderFeed();
+          } catch (error) { status.textContent = error.message; }
         });
         const mic = makeNode('button', 'community-action', `🎙️ ${yap.mics}`);
         mic.type = 'button';
         mic.setAttribute('aria-label', `React with mics, ${yap.mics} reactions`);
-        mic.addEventListener('click', () => {
-          yaps = yaps.map((item) => item.id === yap.id ? { ...item, mics: item.mics + 1 } : item);
-          save(); renderFeed();
+        mic.addEventListener('click', async () => {
+          try {
+            const counts = await window.YapWallBackend.react({ yapId: yap.id, type: 'mics' });
+            yaps = yaps.map((item) => item.id === yap.id ? { ...item, ...counts } : item);
+            renderFeed();
+          } catch (error) { status.textContent = error.message; }
         });
 
         const replyToggle = makeNode('button', 'community-action community-reply-toggle', `↩ Yap Back · ${yap.replies.length}`);
@@ -670,15 +675,16 @@
             replyDrafts[yap.id] = replyInput.value;
             replyButton.disabled = !replyInput.value.trim();
           });
-          replyForm.addEventListener('submit', (event) => {
+          replyForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             const text = replyInput.value.trim();
             if (!text) return;
-            yaps = yaps.map((item) => item.id === yap.id
-              ? { ...item, replies: [...item.replies, { id: createId(), author: authorInput.value.trim() || 'Yap Circle', text }] }
-              : item);
-            replyDrafts[yap.id] = '';
-            save(); renderFeed();
+            try {
+              await window.YapWallBackend.submitReply({ yapId: yap.id, author: authorInput.value.trim() || 'Yap Circle', text });
+              replyDrafts[yap.id] = '';
+              status.textContent = 'Your reply was submitted and will appear after moderation.';
+              await refreshYaps();
+            } catch (error) { status.textContent = error.message; }
           });
           replyForm.append(replyInput, replyButton);
           card.append(replyForm);
@@ -691,19 +697,25 @@
       counter.textContent = `${takeInput.value.length}/280`;
       postButton.disabled = !takeInput.value.trim();
     });
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const text = takeInput.value.trim();
       const topic = topicInput.value.trim() || defaultTopic;
       if (!text) return;
-      yaps = [{ id: createId(), author: authorInput.value.trim() || 'Anonymous', topic, text, flames: 0, mics: 0, replies: [] }, ...yaps];
-      activeTopic = 'All';
-      save(); renderFilters(); renderFeed();
-      form.reset(); counter.textContent = '0/280'; postButton.disabled = true;
+      try {
+        await window.YapWallBackend.submitYap({ author: authorInput.value.trim() || 'Anonymous', topic, text });
+        form.reset(); counter.textContent = '0/280'; postButton.disabled = true;
+        status.textContent = 'Your Yap was submitted and will appear after moderation.';
+      } catch (error) { status.textContent = error.message; }
     });
 
     renderFilters();
     renderFeed();
+    if (!window.YapWallBackend.isConfigured()) {
+      status.textContent = 'Connect Supabase by adding your project URL and anon key to supabase-config.js.';
+    } else {
+      refreshYaps().catch((error) => { status.textContent = error.message; });
+    }
   })();
 
   const revealEls = document.querySelectorAll('.reveal');
