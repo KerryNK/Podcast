@@ -6,7 +6,7 @@ create table if not exists public.yaps (
   author text not null default 'Anonymous' check (char_length(author) between 1 and 40),
   topic text not null check (char_length(topic) between 1 and 48),
   text text not null check (char_length(text) between 1 and 280),
-  status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  status text not null default 'approved' check (status in ('approved', 'rejected')),
   flames integer not null default 0 check (flames >= 0),
   mics integer not null default 0 check (mics >= 0),
   created_at timestamptz not null default now()
@@ -17,7 +17,7 @@ create table if not exists public.replies (
   yap_id uuid not null references public.yaps(id) on delete cascade,
   author text not null default 'Listener' check (char_length(author) between 1 and 40),
   text text not null check (char_length(text) between 1 and 280),
-  status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  status text not null default 'approved' check (status in ('approved', 'rejected')),
   created_at timestamptz not null default now()
 );
 
@@ -46,10 +46,10 @@ drop policy if exists "Anyone can read approved yaps" on public.yaps;
 create policy "Anyone can read approved yaps" on public.yaps
   for select to anon, authenticated using (status = 'approved');
 
-drop policy if exists "Anyone can submit yaps for moderation" on public.yaps;
-create policy "Anyone can submit yaps for moderation" on public.yaps
+drop policy if exists "Anyone can submit yaps instantly" on public.yaps;
+create policy "Anyone can submit yaps instantly" on public.yaps
   for insert to anon, authenticated with check (
-    status = 'pending'
+    status = 'approved'
     and char_length(trim(author)) between 1 and 40
     and char_length(trim(topic)) between 1 and 48
     and char_length(trim(text)) between 1 and 280
@@ -62,10 +62,10 @@ create policy "Anyone can read approved replies to approved yaps" on public.repl
     and exists (select 1 from public.yaps where yaps.id = replies.yap_id and yaps.status = 'approved')
   );
 
-drop policy if exists "Anyone can submit replies for moderation" on public.replies;
-create policy "Anyone can submit replies for moderation" on public.replies
+drop policy if exists "Anyone can submit replies instantly" on public.replies;
+create policy "Anyone can submit replies instantly" on public.replies
   for insert to anon, authenticated with check (
-    status = 'pending'
+    status = 'approved'
     and char_length(trim(author)) between 1 and 40
     and char_length(trim(text)) between 1 and 280
     and exists (select 1 from public.yaps where yaps.id = replies.yap_id and yaps.status = 'approved')

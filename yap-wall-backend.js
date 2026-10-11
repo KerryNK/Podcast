@@ -66,14 +66,14 @@
   async function submitYap({ author, topic, text }) {
     await request('yaps', {
       method: 'POST',
-      body: { author, topic, text, status: 'pending' },
+      body: { author, topic, text },
     });
   }
 
   async function submitReply({ yapId, author, text }) {
     await request('replies', {
       method: 'POST',
-      body: { yap_id: yapId, author, text, status: 'pending' },
+      body: { yap_id: yapId, author, text },
     });
   }
 
