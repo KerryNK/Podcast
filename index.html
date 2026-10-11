@@ -351,6 +351,7 @@
   .community-field:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,90,.18);}
   .community-topic{grid-column:1/-1;}
   .community-take{min-height:116px;margin-top:10px;resize:vertical;line-height:1.65;}
+  .hero-eyebrow, .community-head p, .community-note, .sub-band p, .about-text p, .community-hint, .community-count, .community-empty, .community-reply, .community-action{overflow-wrap:anywhere;}
   .community-composer-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;}
   .community-hint,.community-counter{color:var(--cream-dim);font-size:12px;}
   .community-post{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:0 18px;border:1px solid var(--gold);border-radius:999px;background:var(--gold);color:var(--ink);font-size:12px;font-weight:600;letter-spacing:.05em;transition:transform .2s,background .2s;}
@@ -389,6 +390,16 @@
     .community-topic{grid-column:auto;}
     .community-composer-foot{align-items:flex-end;}
     .community-hint{max-width:60%;line-height:1.5;}
+  }
+  @media(max-width:420px){
+    .hero{padding-top:120px;}
+    .hero-eyebrow{letter-spacing:.18em; line-height:1.6;}
+    .nav-cta{padding:10px 14px; font-size:11px;}
+    .platform-row{width:100%;}
+    .platform-btn{flex:1 1 calc(50% - 10px);}
+    .community-composer-foot{flex-direction:column; align-items:stretch;}
+    .community-hint{max-width:none;}
+    .community-post{width:100%;}
   }
 </style>
 </head>
@@ -442,7 +453,7 @@
     <div class="about-text">
       <span class="eyebrow" style="color:var(--gold); font-size:12px; letter-spacing:.3em; text-transform:uppercase; display:block; margin-bottom:18px;">About the host</span>
       <p>Kerry Yaps Podcast is hosted by Kerry Namayan.</p>
-      <p> A girlie knowledgeable enough to yap professionally. What started as everyday yapping turns into meaningful, no-fluff conversations across tech, culture, lifestyle, and everything in between.</p>      <p>Each episode blends curiosity with clarity, breaking down complex ideas into stories you'll actually enjoy listening to. Smart talks meet unapologetic yapping &mdash; all in one show.</p>
+      <p> A girlie knowledgeable enough to yap professionally. What started as everyday yapping turns into meaningful, no-fluff conversations across tech, culture, lifestyle, and everything in between.</p>      <p>Each episode blends curiosity with clarity, breaking down complex ideas into stories you'll actually enjoy listening to. Smart talks meet unapologetic yapping, all in one show.</p>
       <div class="stat-row">
         <div><div class="stat-num serif">Tech</div></div>
         <div><div class="stat-num serif">Culture</div></div>
@@ -476,7 +487,7 @@
     <form class="community-composer" id="communityComposer">
       <div class="community-composer-top">
         <label class="sr-only" for="communityTopic">Topic</label>
-        <input class="community-field community-topic" id="communityTopic" name="topic" type="text" maxlength="48" placeholder="Tech, Culture & Lifestyle — or type your own topic">
+        <input class="community-field community-topic" id="communityTopic" name="topic" type="text" maxlength="48" placeholder="Tech, Culture & Lifestyle or type your own topic">
         <label class="sr-only" for="communityAuthor">Name or handle (optional)</label>
         <input class="community-field" id="communityAuthor" name="author" type="text" maxlength="40" placeholder="Name or @handle · optional" autocomplete="nickname">
       </div>

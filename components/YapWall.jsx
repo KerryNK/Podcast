@@ -46,7 +46,7 @@ const INITIAL_YAPS = [
     author: 'Anonymous',
     location: 'Nairobi',
     category: 'Money & Ambition',
-    text: 'We need an episode on black tax—not just the money part, but the silent emotional guilt of having boundaries.',
+    text: 'We need an episode on black tax, not just the money part, but the silent emotional guilt of having boundaries.',
     flames: 64,
     mics: 41,
     replies: [],
@@ -155,13 +155,13 @@ export default function YapWall() {
           onSubmit={handlePostYap}
           className="space-y-3 rounded-2xl border border-[#3E2723] bg-[#241917] p-4 shadow-xl"
         >
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <label htmlFor="yap-category" className="sr-only">Yap category</label>
             <select
               id="yap-category"
               value={selectedTopic}
               onChange={(event) => setSelectedTopic(event.target.value)}
-              className="rounded-lg border border-[#3E2723] bg-[#1C1413] px-2.5 py-1.5 text-xs text-[#D4AF37] focus:border-[#D4AF37] focus:outline-none"
+              className="w-full rounded-lg border border-[#3E2723] bg-[#1C1413] px-2.5 py-1.5 text-xs text-[#D4AF37] focus:border-[#D4AF37] focus:outline-none sm:w-auto"
             >
               {CATEGORIES.filter((category) => category !== 'All').map((category) => (
                 <option key={category} value={category}>{category}</option>
@@ -175,7 +175,7 @@ export default function YapWall() {
               placeholder="@handle or Anonymous"
               value={handle}
               onChange={(event) => setHandle(event.target.value)}
-              className="min-w-0 flex-1 rounded-lg border border-[#3E2723] bg-[#1C1413] px-3 py-1.5 text-xs text-[#F7EFE5] focus:border-[#D4AF37] focus:outline-none"
+              className="min-w-0 w-full flex-1 rounded-lg border border-[#3E2723] bg-[#1C1413] px-3 py-1.5 text-xs text-[#F7EFE5] focus:border-[#D4AF37] focus:outline-none"
             />
           </div>
 
@@ -204,7 +204,7 @@ export default function YapWall() {
           </div>
         </form>
 
-        <nav aria-label="Filter yaps by category" className="flex gap-2 overflow-x-auto pb-1">
+        <nav aria-label="Filter yaps by category" className="flex flex-wrap gap-2 pb-1">
           {CATEGORIES.map((category) => (
             <button
               key={category}
